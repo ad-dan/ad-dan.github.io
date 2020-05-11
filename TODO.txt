@@ -7,3 +7,23 @@ About Page
 Projects / Work
 
 Contact
+
+
+Project list: 
+
+SDL mini
+
+Trello
+
+AWS quotes
+
+Game of life
+
+Anki
+
+Weather mate
+
+Game of life
+
+Maze generator
+
