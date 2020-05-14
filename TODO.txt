@@ -11,19 +11,21 @@ Contact
 
 Project list: 
 
-SDL mini
+SDL mini -
 
-Trello
+Trello - 
 
-AWS quotes
+AWS quotes -
 
-Game of life
+Game of life -
 
-Anki
+Anki -
 
-Weather mate
-
-Game of life
+Weather mate 
 
 Maze generator
 
+
+
+
+SVG: https://pixabay.com/images/search/svg/
