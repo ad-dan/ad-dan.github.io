@@ -7,36 +7,43 @@
     <title>Document</title>
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./flexboxgrid.min.css" />
+    
   </head>
   <body>
-    <div>
-      <div class="row end-xs">
-        <div class="col-xs-12 col-sm-2">
-          <div class="row center-xs">
-            <div class="col-xs-6">Projects</div>
-            <div class="col-xs-6">About</div>
+    <div id="grad">
+        <canvas id="canvas-basic"></canvas>
+
+ <div>
+      <div class="row nav end-xs">
+        <div class="col-xs-12 col-lg-2">
+          <div class="row inner-nav center-xs">
+            <a href="#proj" class="col-xs-6 nav-link">Projects</a>
+            <a href="#foot" class="col-xs-6 nav-link">About</a>
           </div>
         </div>
       </div>
     </div>
-    <div>
-      <div class="row">
-        <div class="col-xs-12">
+    <div class="intro-hero">
+    
+      <div class="row name">
+        <div class="col-xs-12 col-sm-12 ">
           <div>
             Aditya Danapurkar
           </div>
           <div>
-            Web Developer
+            Web Dev
           </div>
         </div>
       </div>
     </div>
-    <div>
-      <div class="row">
+    </div>
+   
+    <div class="container" id="proj">
+      <div class="row  center-xs start-md">
         <div class="col-sm-12 col-md-6">
           <div class="proj-box">
-            <div class="proj-img">
-              <img src="./trello.PNG" alt="Trello desc" />
+            <div class="proj-img" style="background-image: url('./trello.PNG')">
+             
             </div>
             <div class="proj-detail">
               <div class="proj-name">Trello clone</div>
@@ -46,8 +53,8 @@
         </div>
         <div class="col-sm-12 col-md-6">
           <div class="proj-box">
-            <div class="proj-img">
-              <img src="./19d4bf90542393.5e1a1487c11c6.jpg" alt="JS Calc" />
+            <div class="proj-img" style="background-image: url('./aurea.jpg')">
+             
             </div>
             <div class="proj-detail">
               <div class="proj-name">Aurea Capital</div>
@@ -56,14 +63,11 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row  center-xs start-md">
         <div class="col-sm-12 col-md-6">
           <div class="proj-box">
-            <div class="proj-img">
-              <img
-                src="./68747470733a2f2f692e696d6775722e636f6d2f45493361414c652e706e67.png"
-                alt="Trello desc"
-              />
+            <div class="proj-img" style="background-image: url('./anki.png')">
+              
             </div>
             <div class="proj-detail">
               <div class="proj-name">Anki</div>
@@ -75,11 +79,11 @@
         </div>
         <div class="col-sm-12 col-md-6">
           <div class="proj-box">
-            <div class="proj-img">
-              <img src="./images.jpg" alt="JS Calc" />
+            <div class="proj-img" style="background-image: url('./shutterstock-1389359966.jpg')"> 
+          
             </div>
             <div class="proj-detail">
-              <div class="proj-name">Random Quotes</div>
+              <div class="proj-name">Quote Gen</div>
               <div class="proj-desc">
                 AWS Lambda based random quote generator
               </div>
@@ -87,11 +91,11 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row  center-xs start-md">
         <div class="col-sm-12 col-md-6">
           <div class="proj-box">
-            <div class="proj-img">
-              <img src="./jscalc.PNG" alt="Trello desc" />
+            <div class="proj-img" style="background-image: url('./jscalc.PNG')">
+             
             </div>
             <div class="proj-detail">
               <div class="proj-name">Calculator</div>
@@ -103,8 +107,8 @@
         </div>
         <div class="col-sm-12 col-md-6">
           <div class="proj-box">
-            <div class="proj-img">
-              <img src="./5fa46d90541499.5e1a0e6eb2ce2.png" alt="JS Calc" />
+            <div class="proj-img" style="background-image: url('./idea.png')">
+              
             </div>
             <div class="proj-detail">
               <div class="proj-name">Event Poster</div>
@@ -122,11 +126,11 @@
     
     </div>
       
-    <div class="row">
+    <div class="row center-xs start-md">
       <div class="col-sm-12 col-md-6">
         <div class="proj-box">
-          <div class="proj-img">
-            <img src="./Capture.jpg" alt="Trello desc" />
+          <div class="proj-img" style="background-image: url('./Capture.jpg')">
+            
           </div>
           <div class="proj-detail">
             <div class="proj-name">Game of Life</div>
@@ -138,8 +142,8 @@
       </div>
       <div class="col-sm-12 col-md-6">
         <div class="proj-box">
-          <div class="proj-img">
-            <img src="./2048.JPG" alt="JS Calc" />
+          <div class="proj-img" style="background-image: url('./twofour.PNG')">
+           
           </div>
           <div class="proj-detail">
             <div class="proj-name">2048</div>
@@ -150,22 +154,44 @@
         </div>
       </div>
     </div>
+    </div>
     <div>
+      
+    <div class="footer" id="foot">
       <div class="row">
-        <div class="col-sm-12 col-md-8">
-          <div>
-            <span
-              >Copyright &copy; 2020 Aditya Danapurkar. All rights
-              reserved</span
-            >
+        <div class="col-xs-12 col-lg-10">
+          <div class="cpr-text start-lg center-md">
+            <div
+              >Copyright &copy; 2020 Aditya Danapurkar. All rights reserved</div>
           </div>
         </div>
-        <div class="col-sm-12 col-md-4">
-          <div>Github</div>
-          <div>Behance</div>
-          <div>Codepen</div>
+        <div class="col-xs-12 col-lg-2 foot-icon-cont">
+            <div class="foot-icon"><a href=""><img src="./resume-svgrepo-com.svg" alt=""></a></div>
+          <div class="foot-icon"><a href="mailto:dan.aditya.0@gmail.com"><img src="./mail-svgrepo-com.svg" alt=""></a></div>
+          <div class="foot-icon"><a href="https://github.com/ad-dan" target="_blank"><img src="./github-icon-1-logo-svgrepo-com.svg" alt=""></a></div>
+          <div class="foot-icon"><a href="https://www.behance.net/adunreal" target="_blank"><img src="./behance-svgrepo-com.svg" alt=""></a></div>
+          
         </div>
       </div>
     </div>
+    <script src="./granim.min.js"></script>
+    <script>
+        var granimInstance = new Granim({
+          element: '#canvas-basic',
+          direction: 'left-right',
+          isPausedWhenNotInView: true,
+          states : {
+              "default-state": {
+                  gradients: [
+                     
+                      ['#8A2387', '#E94057'],
+                      ['#f12711', '#f5af19'],
+                      ['#DA22FF', '#9733EE']
+                  ]
+              }
+          }
+      });
+      
+    </script>
   </body>
 </html>
