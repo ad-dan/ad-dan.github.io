@@ -11,14 +11,14 @@
   </head>
   <body>
     <div id="grad">
-        <canvas id="canvas-basic"></canvas>
+    <div id="canvas-basic"></div>
 
  <div>
       <div class="row nav end-xs">
         <div class="col-xs-12 col-lg-2">
           <div class="row inner-nav center-xs">
-            <a href="#proj" class="col-xs-6 nav-link">Projects</a>
-            <a href="#foot" class="col-xs-6 nav-link">About</a>
+            <a href="#proj" class="col-xs-6 nav-link black">Projects</a>
+            <a href="#foot" class="col-xs-6 nav-link black">About</a>
           </div>
         </div>
       </div>
@@ -27,10 +27,10 @@
     
       <div class="row name">
         <div class="col-xs-12 col-sm-12 ">
-          <div>
+          <div class="black">
             Aditya Danapurkar
           </div>
-          <div>
+          <div class="black">
             Web Dev
           </div>
         </div>
@@ -46,7 +46,7 @@
              
             </div>
             <div class="proj-detail">
-              <div class="proj-name">Trello clone</div>
+              <div class="proj-name"><a href="https://github.com/ad-dan/trello" target="_blank">Trello clone</a></div>
               <div class="proj-desc">Trello board recreation</div>
             </div>
           </div>
@@ -57,7 +57,7 @@
              
             </div>
             <div class="proj-detail">
-              <div class="proj-name">Aurea Capital</div>
+              <div class="proj-name"><a href="https://github.com/ad-dan/sdl-proj" target="_blank">Aurea Capital</a></div>
               <div class="proj-desc">Virtual stock management</div>
             </div>
           </div>
@@ -70,9 +70,9 @@
               
             </div>
             <div class="proj-detail">
-              <div class="proj-name">Anki</div>
+              <div class="proj-name"><a href="https://github.com/ad-dan/Anki" target="_blank">Anki</a></div>
               <div class="proj-desc">
-                React Native web app for a catalog of top anime
+                Mobile app for a catalog of top anime
               </div>
             </div>
           </div>
@@ -83,7 +83,7 @@
           
             </div>
             <div class="proj-detail">
-              <div class="proj-name">Quote Gen</div>
+              <div class="proj-name"><a href="https://github.com/ad-dan/quotes-api" target="_blank">Quote Gen</a></div>
               <div class="proj-desc">
                 AWS Lambda based random quote generator
               </div>
@@ -98,7 +98,7 @@
              
             </div>
             <div class="proj-detail">
-              <div class="proj-name">Calculator</div>
+              <div class="proj-name"><a href="https://codepen.io/adunreal/full/qgYwyw" target="_blank">Calculator</a></div>
               <div class="proj-desc">
                 Calculator designed using Javascript
               </div>
@@ -111,7 +111,7 @@
               
             </div>
             <div class="proj-detail">
-              <div class="proj-name">Event Poster</div>
+              <div class="proj-name"><a href="https://www.behance.net/gallery/90541499/College-event-Poster" target="_blank">Event Poster</a></div>
               <div class="proj-desc">
                 A poster designed for a college event
               </div>
@@ -133,7 +133,7 @@
             
           </div>
           <div class="proj-detail">
-            <div class="proj-name">Game of Life</div>
+            <div class="proj-name"><a href="https://codepen.io/adunreal/pen/BmZbEO" target="_blank">Game of Life</a></div>
             <div class="proj-desc">
               Conway's Game of Life cellular automata 
             </div>
@@ -146,7 +146,7 @@
            
           </div>
           <div class="proj-detail">
-            <div class="proj-name">2048</div>
+            <div class="proj-name"><a href="https://github.com/ad-dan/two-four" target="_blank">2048</a></div>
             <div class="proj-desc">
               Game made using ReactJS
             </div>
@@ -175,8 +175,9 @@
       </div>
     </div>
     <script src="./granim.min.js"></script>
+    <script src="./particles.min.js"></script>
     <script>
-        var granimInstance = new Granim({
+        /*var granimInstance = new Granim({
           element: '#canvas-basic',
           direction: 'left-right',
           isPausedWhenNotInView: true,
@@ -190,8 +191,11 @@
                   ]
               }
           }
-      });
+      });*/
       
+      particlesJS.load('canvas-basic', './config.json', function() {
+        console.log('callback - particles.js config loaded');
+      });
     </script>
   </body>
 </html>

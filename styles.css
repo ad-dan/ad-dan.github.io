@@ -181,14 +181,12 @@ svg {
 
 #canvas-basic {
   position: absolute;
-  display: block;
   width: 100%;
   height: 100%;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: -1;
 }
 .proj-box {
   display: flex;
@@ -259,6 +257,12 @@ svg {
   justify-content: center;
   align-items: center;
 }
+#grad {
+  width: 100vw;
+  background: #060514;
+  height: 100vh;
+}
+
 .foot-icon > a > img {
   width: 1.2rem;
 }
@@ -274,10 +278,18 @@ svg {
 .nav-link {
   color: #fff;
   text-decoration: none;
+  z-index: 10;
 }
 body {
   max-width: 100vw;
   overflow-x: hidden;
+}
+a {
+  text-decoration: none;
+}
+a:visited {
+  text-decoration: none;
+  color: inherit;
 }
 @media screen and (max-width: 900px) {
   .intro-hero {
