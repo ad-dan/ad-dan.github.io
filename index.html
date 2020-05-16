@@ -10,6 +10,9 @@
     
   </head>
   <body>
+    <div id="loader">
+        <div class="lds-ripple"><div></div><div></div></div>
+    </div>
     <div id="grad">
     <div id="canvas-basic"></div>
 
@@ -17,8 +20,8 @@
       <div class="row nav end-xs">
         <div class="col-xs-12 col-lg-2">
           <div class="row inner-nav center-xs">
-            <a href="#proj" class="col-xs-6 nav-link black">Projects</a>
-            <a href="#foot" class="col-xs-6 nav-link black">About</a>
+            <a href="#proj" class="col-xs-6 nav-link">Projects</a>
+            <a href="#foot" class="col-xs-6 nav-link">About</a>
           </div>
         </div>
       </div>
@@ -194,7 +197,13 @@
       
       particlesJS.load('canvas-basic', "./config.json"
       , function() {
-        console.log('callback - particles.js config loaded');
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            const loadDiv = document.getElementById('loader');
+            loadDiv.style.display="none";
+          }, 1500)
+        })
+        
       });
     </script>
   </body>
