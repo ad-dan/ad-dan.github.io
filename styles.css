@@ -225,6 +225,13 @@ svg {
   letter-spacing: 1px;
   padding-right: 1.4rem;
 }
+.proj-name > a {
+  color: #212121;
+  text-decoration: none;
+}
+a {
+  color: inherit;
+}
 .proj-desc {
   font-family: 'Montserrat', sans-serif;
 
@@ -289,7 +296,7 @@ a {
 }
 a:visited {
   text-decoration: none;
-  color: inherit;
+  color: initial;
 }
 @media screen and (max-width: 900px) {
   .intro-hero {
