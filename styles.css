@@ -2,8 +2,22 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-@import url('./NoeDisplay-Bold.ttf');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+@font-face {
+    font-family: 'Noe Display';
+    src: url('NoeDisplay-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Noe Display';
+    src: url('NoeDisplay-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+
+
 html,
 body,
 div,

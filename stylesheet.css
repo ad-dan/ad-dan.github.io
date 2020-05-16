@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'Noe Display';
+    src: url('NoeDisplay-Bold.woff2') format('woff2'),
+        url('NoeDisplay-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Noe Display';
+    src: url('NoeDisplay-Medium.woff2') format('woff2'),
+        url('NoeDisplay-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+
