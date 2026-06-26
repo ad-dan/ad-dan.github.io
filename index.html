@@ -521,19 +521,29 @@
     .proj-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;          /* modern, clean way */
-  margin-top: -0.5rem;
-  margin-bottom: 0.5rem;
+  aspect-ratio: 1 / 1;         
+  margin-bottom: 1rem;
   overflow: hidden;
   background: var(--bg3, #1A1033);
+  mix-blend-mode: screen; 
+  
+ 
+  border: 1px solid var(--border2);
+  border-radius: 8px; 
+  background: var(--bg);
+  
+
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  filter: saturate(0.9) brightness(0.9); 
 }
 
+
 /* Fallback for older browsers (optional) */
-@supports not (aspect-ratio: 16 / 9) {
+@supports not (aspect-ratio: 1 / 1) {
   .proj-image::before {
     content: '';
     display: block;
-    padding-top: 56.25%;          /* 9 / 16 * 100 */
+    padding-top: 100%;          
   }
   .proj-image img,
   .proj-image-overlay {
@@ -977,6 +987,8 @@
     .reveal-delay-2 { transition-delay: 0.2s; }
     .reveal-delay-3 { transition-delay: 0.3s; }
     .reveal-delay-4 { transition-delay: 0.4s; }
+
+    
 
     /* ===========================
        RESPONSIVE
