@@ -92,7 +92,7 @@
       top: 0; left: 0; height: 100%;
       background: linear-gradient(90deg, var(--sun), var(--dusk));
       width: 0;
-      animation: loaderFill 0.4s ease-out forwards;
+      animation: loaderFill 2s ease-out forwards;
     }
     @keyframes loaderFill { to { width: 100%; } }
     .loader-text {
@@ -518,6 +518,41 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 18px;
     }
+    .proj-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;          /* modern, clean way */
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  background: var(--bg3, #1A1033);
+}
+
+/* Fallback for older browsers (optional) */
+@supports not (aspect-ratio: 16 / 9) {
+  .proj-image::before {
+    content: '';
+    display: block;
+    padding-top: 56.25%;          /* 9 / 16 * 100 */
+  }
+  .proj-image img,
+  .proj-image-overlay {
+    position: absolute;
+    top: 0; left: 0;
+  }
+}
+
+.proj-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;              /* fills container, crops nicely */
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.proj-card:hover .proj-image img {
+  transform: scale(1.05);         /* subtle zoom on hover */
+}
     .proj-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -1130,9 +1165,15 @@
       </div>
       <div class="projects-grid">
         <a class="proj-card reveal tilt" href="https://github.com/ad-dan/aiagent" target="_blank">
+          
           <div class="proj-content">
             <div class="proj-number">01 / Agentic AI</div>
+            
             <div class="proj-title">ChainMind</div>
+            <div class="proj-image">
+    <img src="./images/proj-1.jpeg" alt="ChainMind" loading="lazy" />
+    <div class="proj-image-overlay"></div>
+  </div>
             <div class="proj-desc">AI-powered autonomous agents that execute complex blockchain operations on Solana and EVM networks through natural language commands</div>
             <div class="proj-footer">
               <span class="proj-tag tag-oss">Agentic AI</span>
@@ -1144,6 +1185,10 @@
           <div class="proj-content">
             <div class="proj-number">02 / Cloud Infra</div>
             <div class="proj-title">Geth Wraith</div>
+            <div class="proj-image">
+    <img src="./images/proj-2.jpeg" alt="GethWraith" loading="lazy" />
+    <div class="proj-image-overlay"></div>
+  </div>
             <div class="proj-desc">Real-time dashboard for monitoring and managing EVM blockchain nodes with deep visibility into health, performance, and network connectivity.</div>
             <div class="proj-footer">
               <span class="proj-tag tag-oss">Node Infrastructure</span>
@@ -1155,6 +1200,10 @@
           <div class="proj-content">
             <div class="proj-number">03 / Decentralized Governance</div>
             <div class="proj-title">Bao Dao</div>
+            <div class="proj-image">
+    <img src="./images/proj-3.jpeg" alt="DAO" loading="lazy" />
+    <div class="proj-image-overlay"></div>
+  </div>
             <div class="proj-desc">Full-stack DAO enabling gasless governance through meta-transactions, allowing members to vote on-chain without transaction fees.</div>
             <div class="proj-footer">
               <span class="proj-tag tag-oss">DAO Governance</span>
@@ -1166,6 +1215,10 @@
           <div class="proj-content">
             <div class="proj-number">04 / Decentralized Exchange</div>
             <div class="proj-title">Vex Dex</div>
+            <div class="proj-image">
+    <img src="./images/proj-4.jpeg" alt="DEX" loading="lazy" />
+    <div class="proj-image-overlay"></div>
+  </div>
             <div class="proj-desc">Decentralized cryptocurrency exchange on Ethereum enabling peer-to-peer trading directly from user wallets without intermediaries.</div>
             <div class="proj-footer">
               <span class="proj-tag tag-web">DeFi</span>
@@ -1177,6 +1230,10 @@
           <div class="proj-content">
             <div class="proj-number">05 / Marketplace</div>
             <div class="proj-title">NFT Marketplace</div>
+            <div class="proj-image">
+    <img src="./images/proj-5.jpeg" alt="NFT" loading="lazy" />
+    <div class="proj-image-overlay"></div>
+  </div>
             <div class="proj-desc">A Fullstack NFT marketplace on Ethereum enabling users to mint, auction, buy, and sell NFTs with a modern Web3 interface.</div>
             <div class="proj-footer">
               <span class="proj-tag tag-web">Fullstack</span>
@@ -1188,6 +1245,10 @@
           <div class="proj-content">
             <div class="proj-number">06 / Smart Contracts</div>
             <div class="proj-title">ERC Minter</div>
+            <div class="proj-image">
+    <img src="./images/proj-6.jpeg" alt="Minter" loading="lazy" />
+    <div class="proj-image-overlay"></div>
+  </div>
             <div class="proj-desc">Smart contract system where users spend ERC-20 tokens to mint unique ERC-721 NFTs, creating a token-gated on-chain minting mechanism.</div>
             <div class="proj-footer">
               <span class="proj-tag tag-web">Smart Contracts</span>
@@ -1323,7 +1384,7 @@
     window.addEventListener('load', () => {
       setTimeout(() => {
         document.getElementById('loader').classList.add('hidden');
-      }, 500);
+      }, 2000);
     });
 
     /* ============================================
@@ -1604,7 +1665,7 @@
       addLine('<span class="term-prompt">$ </span><span class="term-cursor"></span>');
     }
 
-    setTimeout(runTerminal, 2400);
+    setTimeout(runTerminal, 1200);
 
     function getTo(sel) {
       document.querySelector(sel).scrollIntoView({ behavior: 'smooth' });
