@@ -2757,18 +2757,9 @@ async function loadGitHubGraph() {
   }
 }
 
-/* ----- Lazy Load (only when section is in view) ----- */
-const ghObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      loadGitHubGraph();
-      ghObs.disconnect();
-    }
-  });
-}, { rootMargin: '200px' });
+loadGitHubGraph();
 
-const ghSection = document.getElementById('github');
-if (ghSection) ghObs.observe(ghSection);
+/* ----- Lazy Load (only when section is in view) ----- */
 
     /* ============================================
        MOBILE MENU
