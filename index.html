@@ -6,6 +6,9 @@
   <title>Aditya Danapurkar</title>
   <meta name="description" content="Fullstack Blockchain Developer building AI-powered Web3 systems." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+  
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -57,9 +60,6 @@
     /* ===========================
        LOADER
        =========================== */
-    /* ============================
-   LOADER
-   ============================ */
 #loader {
   position: fixed;
   inset: 0;
@@ -638,7 +638,10 @@
     .term-dot.y { background: #FFBD2E; }
     .term-dot.g { background: #27C93F; }
     .term-title { font-size: 11px; color: var(--muted); margin-left: 12px; }
-    .term-body { padding: 22px 24px; font-size: 13px; line-height: 2; min-height: 320px; }
+    .term-body { padding: 22px 24px;
+  font-size: 13px;
+  line-height: 1.5; /* Tightened from 2 */
+  margin-left: 8px; }
     .term-line { display: block; opacity: 0; animation: termFade 0.2s forwards; }
     @keyframes termFade { to { opacity: 1; } }
     .term-prompt { color: var(--sun); }
@@ -653,7 +656,29 @@
       animation: blink 1s step-end infinite;
       box-shadow: 0 0 8px var(--sun);
     }
+    /* Add this to your style block */
+.term-body span {
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+}
+.term-val, .term-str {
+  text-shadow: 0 0 8px rgba(255, 106, 193, 0.4);
+}
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    .terminal {
+  position: relative;
+  /* ... existing styles ... */
+}
+
+/* Add this to create a "glass" scanline effect */
+.terminal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+              linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 4px, 3px 100%;
+  pointer-events: none;
+}
 
     /* ===========================
        ABOUT
@@ -814,7 +839,7 @@
 .proj-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;              /* fills container, crops nicely */
+  object-fit: cover;             /* fills container, crops nicely */
   display: block;
   transition: transform 0.5s ease;
 }
@@ -1247,8 +1272,6 @@
     .reveal-delay-3 { transition-delay: 0.3s; }
     .reveal-delay-4 { transition-delay: 0.4s; }
 
-    
-
     /* ===========================
        RESPONSIVE
        =========================== */
@@ -1284,71 +1307,15 @@
 </head>
 <body>
 
-  <!-- LOADER -->
-  <div id="loader">
-  <canvas id="loaderMatrix"></canvas>
-  <div class="scan-line"></div>
-
-  <div class="loader-frame">
-    <span></span>
-  </div>
-
-  <div class="loader-content">
-    <!-- Glitch Logo -->
-    <div class="loader-logo" data-text="ADITYA">ADITYA</div>
-    <div class="loader-sublogo">portfolio.os v2.6.26</div>
-
-    <!-- Circular Progress Ring -->
-    <div class="loader-ring">
-      <svg viewBox="0 0 120 120">
-        <defs>
-          <linearGradient id="loaderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#00F0FF"/>
-            <stop offset="50%" stop-color="#D946EF"/>
-            <stop offset="100%" stop-color="#FF2E88"/>
-          </linearGradient>
-        </defs>
-        <circle class="ring-bg" cx="60" cy="60" r="52"/>
-        <circle class="ring-progress" cx="60" cy="60" r="52"/>
-      </svg>
-      <div class="ring-percent">0<span>%</span></div>
-    </div>
-
-    <!-- Status + Bar -->
-    <div class="loader-status">
-      <div class="loader-stage">
-        <span class="stage-dot"></span>
-        <span class="stage-text">Initializing kernel</span>
-      </div>
-      <div class="loader-bar">
-        <div class="loader-bar-fill"></div>
-      </div>
-    </div>
-
-    <!-- Boot Log -->
-    <div class="loader-log" id="loaderLog"></div>
-
-    <!-- Corner tags -->
-    <div class="loader-tags">
-      <span class="tag">SYS://BOOT_SEQUENCE</span>
-      <span class="tag blink">● LIVE</span>
-    </div>
-  </div>
-</div>
-
-  <!-- SCROLL PROGRESS -->
   <div class="scroll-progress" id="scrollProgress"></div>
 
-  <!-- CURSOR -->
   <div id="cursor"></div>
   <div id="cursor-ring"></div>
 
-  <!-- BACKGROUNDS -->
   <div class="aurora"></div>
   <div class="grid-bg"></div>
   <canvas id="particles"></canvas>
 
-  <!-- NAV -->
   <nav id="nav">
     <div class="nav-left">
       <a class="nav-logo" href="#top">adityadanapurkar<span>.com</span></a>
@@ -1370,7 +1337,6 @@
 
   <main id="top">
 
-    <!-- HERO -->
     <section id="hero" class="section">
       <div class="hero-grid">
         <div>
@@ -1401,13 +1367,33 @@
               <span class="term-dot g"></span>
               <span class="term-title">aditya@portfolio:~</span>
             </div>
-            <div class="term-body" id="termBody"></div>
+            <div class="term-body" id="termBody">
+  <span class="term-line"><span class="term-prompt">$ </span><span class="term-cmd">whoami</span></span>
+  <span class="term-line"><span class="term-val">aditya</span></span>
+  
+  <span class="term-line"><span class="term-prompt">$ </span><span class="term-cmd">cat about.json</span></span>
+  <span class="term-line"><span class="term-brace">{</span></span>
+  <span class="term-line">&nbsp;&nbsp;<span class="term-key">"name"</span>: <span class="term-val">"Aditya Danapurkar"</span>,</span>
+  <span class="term-line">&nbsp;&nbsp;<span class="term-key">"location"</span>: <span class="term-val">"IN 🇮🇳"</span>,</span>
+  <span class="term-line">&nbsp;&nbsp;<span class="term-key">"role"</span>: <span class="term-val">"Fullstack Blockchain Dev"</span>,</span>
+  <span class="term-line">&nbsp;&nbsp;<span class="term-key">"stack"</span>: <span class="term-val">[</span></span>
+  <span class="term-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="term-str">"JavaScript", "TypeScript"</span>,</span>
+  <span class="term-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="term-str">"Solidity", "Node.js"</span></span>
+  <span class="term-line">&nbsp;&nbsp;<span class="term-val">]</span>,</span>
+  <span class="term-line">&nbsp;&nbsp;<span class="term-key">"lockedIn"</span>: <span class="term-val">true</span>,</span>
+  <span class="term-line">&nbsp;&nbsp;<span class="term-key">"openToWork"</span>: <span class="term-val">true</span></span>
+  <span class="term-line"><span class="term-brace">}</span></span>
+  
+  <span class="term-line"><span class="term-prompt">$ </span><span class="term-cmd">echo "let's build"</span></span>
+  <span class="term-line"><span class="term-val">let's build 🚀</span></span>
+  
+  <span class="term-line"><span class="term-prompt">$ </span><span class="term-cursor"></span></span>
+</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ABOUT -->
     <section id="about" class="section">
       <div class="about-layout">
         <div>
@@ -1456,7 +1442,6 @@
       </div>
     </section>
 
-    <!-- MARQUEE -->
     <div class="marquee-section">
       <div class="marquee">
         <div class="marquee-item">FULL STACK <span class="dot"></span></div>
@@ -1470,7 +1455,6 @@
       </div>
     </div>
 
-    <!-- PROJECTS -->
     <section id="projects" class="section">
       <div class="section-header">
         <div>
@@ -1487,7 +1471,7 @@
             
             <div class="proj-title">ChainMind</div>
             <div class="proj-image">
-    <img src="./images/proj-1.jpeg" alt="ChainMind"  />
+    <img src="./images/proj-1.jpeg" alt="ChainMind" loading="lazy" decoding="async" />
     <div class="proj-image-overlay"></div>
   </div>
             <div class="proj-desc">AI-powered autonomous agents that execute complex blockchain operations on Solana and EVM networks through natural language commands</div>
@@ -1502,7 +1486,7 @@
             <div class="proj-number">02 / Cloud Infra</div>
             <div class="proj-title">Geth Wraith</div>
             <div class="proj-image">
-    <img src="./images/proj-2.jpeg" alt="GethWraith"  />
+    <img src="./images/proj-2.jpeg" alt="GethWraith" loading="lazy" decoding="async" />
     <div class="proj-image-overlay"></div>
   </div>
             <div class="proj-desc">Real-time dashboard for monitoring and managing EVM blockchain nodes with deep visibility into health, performance, and network connectivity.</div>
@@ -1517,7 +1501,7 @@
             <div class="proj-number">03 / Decentralized Governance</div>
             <div class="proj-title">Bao Dao</div>
             <div class="proj-image">
-    <img src="./images/proj-3.jpeg" alt="DAO"  />
+    <img src="./images/proj-3.jpeg" alt="DAO" loading="lazy" decoding="async" />
     <div class="proj-image-overlay"></div>
   </div>
             <div class="proj-desc">Full-stack DAO enabling gasless governance through meta-transactions, allowing members to vote on-chain without transaction fees.</div>
@@ -1532,7 +1516,7 @@
             <div class="proj-number">04 / Decentralized Exchange</div>
             <div class="proj-title">Vex Dex</div>
             <div class="proj-image">
-    <img src="./images/proj-4.jpeg" alt="DEX"  />
+    <img src="./images/proj-4.jpeg" alt="DEX" loading="lazy" decoding="async" />
     <div class="proj-image-overlay"></div>
   </div>
             <div class="proj-desc">Decentralized cryptocurrency exchange on Ethereum enabling peer-to-peer trading directly from user wallets without intermediaries.</div>
@@ -1547,7 +1531,7 @@
             <div class="proj-number">05 / Marketplace</div>
             <div class="proj-title">NFT Marketplace</div>
             <div class="proj-image">
-    <img src="./images/proj-5.jpeg" alt="NFT"  />
+    <img src="./images/proj-5.jpeg" alt="NFT" loading="lazy" decoding="async" />
     <div class="proj-image-overlay"></div>
   </div>
             <div class="proj-desc">A Fullstack NFT marketplace on Ethereum enabling users to mint, auction, buy, and sell NFTs with a modern Web3 interface.</div>
@@ -1562,7 +1546,7 @@
             <div class="proj-number">06 / Smart Contracts</div>
             <div class="proj-title">ERC Minter</div>
             <div class="proj-image">
-    <img src="./images/proj-6.jpeg" alt="Minter"  />
+    <img src="./images/proj-6.jpeg" alt="Minter" loading="lazy" decoding="async" />
     <div class="proj-image-overlay"></div>
   </div>
             <div class="proj-desc">Smart contract system where users spend ERC-20 tokens to mint unique ERC-721 NFTs, creating a token-gated on-chain minting mechanism.</div>
@@ -1575,7 +1559,6 @@
       </div>
     </section>
 
-    <!-- SOCIAL -->
     <section id="social" class="section">
       <div class="section-header">
         <div>
@@ -1617,7 +1600,6 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
     <section id="contact" class="section">
       <div class="contact-layout">
         <div class="reveal">
@@ -1652,7 +1634,6 @@
 
   </main>
 
-  <!-- FLOATING DOCK -->
   <div class="dock">
     <a class="dock-item" href="#hero" aria-label="Home">
       🏡
@@ -1672,7 +1653,6 @@
     </a>
   </div>
 
-  <!-- COMMAND PALETTE -->
   <div id="cmd-overlay" onclick="closeCmd(event)">
     <div id="cmd" onclick="event.stopPropagation()">
       <input type="text" class="cmd-input" id="cmdInput" placeholder="Type a command or search..." />
@@ -1680,7 +1660,6 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-left">
       © 2026 Aditya — Built with <span class="heart">♥</span> &amp; code
@@ -1697,179 +1676,6 @@
     /* ============================================
        LOADER
        ============================================ */
-    /* ============================================
-   LOADER — Boot Sequence
-   ============================================ */
-(function loader() {
-  const loaderEl = document.getElementById('loader');
-  const matrixCanvas = document.getElementById('loaderMatrix');
-  const mctx = matrixCanvas.getContext('2d');
-  const logEl = document.getElementById('loaderLog');
-  const ring = document.querySelector('.ring-progress');
-  const percentEl = document.querySelector('.ring-percent');
-  const stageText = document.querySelector('.stage-text');
-  const barFill = document.querySelector('.loader-bar-fill');
-
-  // SVG ring constants (r=52, circumference = 2πr ≈ 326.7)
-  const RING_LEN = 326.7;
-
-  // ============================
-  // Matrix Rain Background
-  // ============================
-  const chars = '01ABCDEFG<>{}[]/\\アイウエオカキクケコ$ETH₿';
-  let fontSize = 14;
-  let cols = 0;
-  let drops = [];
-
-  function resizeMatrix() {
-    matrixCanvas.width = window.innerWidth;
-    matrixCanvas.height = window.innerHeight;
-    cols = Math.floor(matrixCanvas.width / fontSize);
-    drops = new Array(cols).fill(0).map(() => Math.random() * matrixCanvas.height);
-  }
-  window.addEventListener('resize', resizeMatrix);
-  resizeMatrix();
-
-  function drawMatrix() {
-    mctx.fillStyle = 'rgba(8, 6, 15, 0.08)';
-    mctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-    mctx.fillStyle = '#00F0FF';
-    mctx.font = fontSize + 'px monospace';
-
-    for (let i = 0; i < cols; i++) {
-      const text = chars[Math.floor(Math.random() * chars.length)];
-      mctx.fillText(text, i * fontSize, drops[i]);
-      if (drops[i] > matrixCanvas.height && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
-      drops[i] += fontSize;
-    }
-  }
-  const matrixInterval = setInterval(drawMatrix, 60);
-
-  // ============================
-  // Loading Stages
-  // ============================
-  const stages = [
-  {
-    progress: 12,
-    message: 'Establishing server uplink',
-    logs: [
-      { type: 'info', text: '> Bypassing netwall to access portfolio domain' },
-      { type: 'dim',  text: '> Injecting custom neon stylesheets...' },
-      { type: 'ok',   text: '✓ Base DOM framework constructed' },
-      { type: 'dim',  text: '> Loading cyber-typography modules' },
-    ]
-  },
-  {
-    progress: 34,
-    message: 'Decrypting skill matrix',
-    logs: [
-      { type: 'dim',  text: '> Unpacking developer proficiencies...' },
-      { type: 'info', text: '> Compiling tech-stack engrams' },
-      { type: 'ok',   text: '✓ Frontend cybernetics [ONLINE]' },
-      { type: 'ok',   text: '✓ Backend logic architecture [SYNCHRONIZED]' },
-    ]
-  },
-  {
-    progress: 68,
-    message: 'Siphoning project archives',
-    logs: [
-      { type: 'info', text: '> Accessing restricted case-study vaults' },
-      { type: 'dim',  text: '> Rendering 3D asset holograms...' },
-      { type: 'ok',   text: '✓ High-res UI textures unpacked' },
-      { type: 'warn', text: '! Bandwidth spike: Heavy creative assets detected' },
-      { type: 'ok',   text: '✓ Portfolio gallery fully cached' },
-    ]
-  },
-  {
-    progress: 87,
-    message: 'Activating interactive mesh',
-    logs: [
-      { type: 'dim',  text: '> Spooling up event listeners and hover states...' },
-      { type: 'ok',   text: '✓ User telemetry bound to cursor input' },
-      { type: 'info', text: '> Routing contact form to secure comms channel' },
-      { type: 'warn', text: '! Preparing for direct neural immersion' },
-    ]
-  },
-  {
-    progress: 100,
-    message: 'Portfolio construct online',
-    logs: [
-      { type: 'ok',   text: '✓ Visual cortex synchronization @ 144Hz' },
-      { type: 'info', text: '> All website nodes materialized.' },
-      { type: 'ok',   text: '✓ Link up to explore.' },
-    ]
-  }
-];
-  // ============================
-  // Progress Helpers
-  // ============================
-  function setProgress(p) {
-    const offset = RING_LEN - (RING_LEN * p / 100);
-    ring.style.strokeDashoffset = offset;
-    percentEl.innerHTML = Math.floor(p) + '<span>%</span>';
-    barFill.style.width = p + '%';
-  }
-
-  function animateProgress(target, duration = 700) {
-    return new Promise(resolve => {
-      const currentText = percentEl.textContent.replace('%', '');
-      const current = parseFloat(currentText) || 0;
-      const start = performance.now();
-
-      function step(now) {
-        const t = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - t, 3);
-        const value = current + (target - current) * eased;
-        setProgress(value);
-        if (t < 1) requestAnimationFrame(step);
-        else resolve();
-      }
-      requestAnimationFrame(step);
-    });
-  }
-
-  function addLog(log) {
-    const line = document.createElement('span');
-    line.className = 'log-line ' + log.type;
-    line.textContent = log.text;
-    logEl.appendChild(line);
-    // Keep only last 6 lines visible
-    while (logEl.children.length > 6) {
-      logEl.removeChild(logEl.firstChild);
-    }
-  }
-
-  // ============================
-  // Run Boot Sequence
-  // ============================
-  async function runLoader() {
-    for (const stage of stages) {
-      stageText.textContent = stage.message;
-      const progressPromise = animateProgress(stage.progress);
-      for (const log of stage.logs) {
-        addLog(log);
-        await new Promise(r => setTimeout(r, 180));
-      }
-      await progressPromise;
-      await new Promise(r => setTimeout(r, 250));
-    }
-
-    // Hold for a moment, then fade out
-    await new Promise(r => setTimeout(r, 700));
-    // Final glitch burst before fade out
-loaderEl.classList.add('glitching');
-await new Promise(r => setTimeout(r, 400));
-loaderEl.classList.remove('glitching');
-    clearInterval(matrixInterval);
-    loaderEl.classList.add('hidden');
-  }
-
-  // Start after loader renders
-  setTimeout(runLoader, 400);
-})();
-
     /* ============================================
        NOISE TEXTURE
        ============================================ */
@@ -1898,18 +1704,25 @@ loaderEl.classList.remove('glitching');
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursor-ring');
     let mx = 0, my = 0, rx = 0, ry = 0;
+    
+    // Performance: passive listener
     document.addEventListener('mousemove', e => {
       mx = e.clientX; my = e.clientY;
       cursor.style.left = mx + 'px';
       cursor.style.top = my + 'px';
-    });
+    }, { passive: true });
+    
     (function animRing() {
-      rx += (mx - rx) * 0.14;
-      ry += (my - ry) * 0.14;
-      ring.style.left = rx + 'px';
-      ring.style.top = ry + 'px';
+      // Performance: Only render if tab is visible
+      if (!document.hidden) {
+        rx += (mx - rx) * 0.14;
+        ry += (my - ry) * 0.14;
+        ring.style.left = rx + 'px';
+        ring.style.top = ry + 'px';
+      }
       requestAnimationFrame(animRing);
     })();
+
     document.querySelectorAll('a, button, .proj-card, .platform-card, .dock-item, .skill, .social-pill').forEach(el => {
       el.addEventListener('mouseenter', () => {
         cursor.style.width = '6px'; cursor.style.height = '6px';
@@ -1924,17 +1737,22 @@ loaderEl.classList.remove('glitching');
     });
 
     /* ============================================
-       SCROLL PROGRESS
+       SCROLL PROGRESS (Throttled for Performance)
        ============================================ */
+    let isScrolling = false;
     window.addEventListener('scroll', () => {
-      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      document.getElementById('scrollProgress').style.width = scrolled + '%';
-
-      // Nav background on scroll
-      document.getElementById('nav').classList.toggle('scrolled', winScroll > 20);
-    });
+      if (!isScrolling) {
+        window.requestAnimationFrame(() => {
+          const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+          const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const scrolled = (winScroll / height) * 100;
+          document.getElementById('scrollProgress').style.width = scrolled + '%';
+          document.getElementById('nav').classList.toggle('scrolled', winScroll > 20);
+          isScrolling = false;
+        });
+        isScrolling = true;
+      }
+    }, { passive: true });
 
     /* ============================================
        LIVE CLOCK (IST)
@@ -1957,11 +1775,14 @@ loaderEl.classList.remove('glitching');
     let W, H;
     const COLS = ['#00F0FF', '#FF2E88', '#D946EF', '#F8F32B', '#FF6AC1'];
     const pts = [];
+    
     function resize() {
       W = canvas.width = window.innerWidth;
       H = canvas.height = window.innerHeight;
     }
-    window.addEventListener('resize', resize); resize();
+    window.addEventListener('resize', resize, { passive: true }); 
+    resize();
+    
     function P() {
       this.x = Math.random() * W;
       this.y = Math.random() * H;
@@ -1972,36 +1793,40 @@ loaderEl.classList.remove('glitching');
       this.c = COLS[Math.floor(Math.random() * COLS.length)];
     }
     for (let i = 0; i < 90; i++) pts.push(new P());
+    
     function drawParticles() {
-      ctx.clearRect(0, 0, W, H);
-      // Connecting lines
-      for (let i = 0; i < pts.length; i++) {
-        for (let j = i + 1; j < pts.length; j++) {
-          const dx = pts[i].x - pts[j].x;
-          const dy = pts[i].y - pts[j].y;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          if (dist < 120) {
-            ctx.beginPath();
-            ctx.moveTo(pts[i].x, pts[i].y);
-            ctx.lineTo(pts[j].x, pts[j].y);
-            ctx.strokeStyle = pts[i].c;
-            ctx.globalAlpha = (1 - dist/120) * 0.1;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+      // Performance: Only render if tab is visible
+      if (!document.hidden) {
+        ctx.clearRect(0, 0, W, H);
+        // Connecting lines
+        for (let i = 0; i < pts.length; i++) {
+          for (let j = i + 1; j < pts.length; j++) {
+            const dx = pts[i].x - pts[j].x;
+            const dy = pts[i].y - pts[j].y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(pts[i].x, pts[i].y);
+              ctx.lineTo(pts[j].x, pts[j].y);
+              ctx.strokeStyle = pts[i].c;
+              ctx.globalAlpha = (1 - dist/120) * 0.1;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
+        pts.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+          ctx.fillStyle = p.c;
+          ctx.globalAlpha = p.o;
+          ctx.fill();
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > W) p.vx *= -1;
+          if (p.y < 0 || p.y > H) p.vy *= -1;
+        });
+        ctx.globalAlpha = 1;
       }
-      pts.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
-        ctx.fillStyle = p.c;
-        ctx.globalAlpha = p.o;
-        ctx.fill();
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > W) p.vx *= -1;
-        if (p.y < 0 || p.y > H) p.vy *= -1;
-      });
-      ctx.globalAlpha = 1;
       requestAnimationFrame(drawParticles);
     }
     drawParticles();
@@ -2056,7 +1881,8 @@ loaderEl.classList.remove('glitching');
         card.style.transform = `perspective(1000px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-4px)`;
         card.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
         card.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
-      });
+      }, { passive: true });
+      
       card.addEventListener('mouseleave', () => {
         card.style.transform = 'perspective(1000px) rotateY(0) rotateX(0) translateY(0)';
       });
@@ -2071,7 +1897,8 @@ loaderEl.classList.remove('glitching');
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
         btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
-      });
+      }, { passive: true });
+      
       btn.addEventListener('mouseleave', () => {
         btn.style.transform = 'translate(0, 0)';
       });
@@ -2080,80 +1907,16 @@ loaderEl.classList.remove('glitching');
     /* ============================================
        TYPING TERMINAL
        ============================================ */
-    const termBody = document.getElementById('termBody');
-    const lines = [
-      { p: '$ ', c: 'whoami', out: 'aditya', wait: 600 },
-      { p: '$ ', c: 'cat about.json', out: null, wait: 500 },
-      { brace: '{', wait: 100 },
-      { kv: ['"name"', '"Aditya Danapurkar"'], wait: 100 },
-      { kv: ['"location"', '"IN 🇮🇳"'], wait: 100 },
-      { kv: ['"role"', '"Fullstack Blockchain Dev"'], wait: 100 },
-      { kv: ['"stack"', '['], wait: 100 },
-      { arr: '"JavaScript", "TypeScript"', wait: 100 },
-      { arr: '"Solidity", "Node.js"', wait: 100 },
-      { kv: ['', ']'], wait: 100 },
-      { kv: ['"lockedIn"', 'true'], wait: 100 },
-      { kv: ['"openToWork"', 'true'], wait: 100 },
-      { brace: '}', wait: 200 },
-      { p: '$ ', c: 'echo "let\'s build"', out: 'let\'s build 🚀', wait: 800 },
-    ];
-
-    function addLine(html) {
-      const span = document.createElement('span');
-      span.className = 'term-line';
-      span.innerHTML = html;
-      termBody.appendChild(span);
-    }
-
-    function typeText(el, text, speed = 40) {
-      return new Promise(resolve => {
-        let i = 0;
-        const t = setInterval(() => {
-          el.textContent += text[i++];
-          if (i >= text.length) { clearInterval(t); resolve(); }
-        }, speed);
-      });
-    }
-
-    async function runTerminal() {
-      for (const line of lines) {
-        if (line.p) {
-          const prompt = document.createElement('span');
-          prompt.className = 'term-prompt';
-          prompt.textContent = line.p;
-          addLine(prompt.outerHTML);
-          const cmd = document.createElement('span');
-          cmd.className = 'term-cmd';
-          addLine(cmd.outerHTML);
-          const cmdEls = termBody.querySelectorAll('.term-line');
-          const last = cmdEls[cmdEls.length - 1];
-          await typeText(last, line.c, 50);
-          await new Promise(r => setTimeout(r, 200));
-          if (line.out) {
-            const out = document.createElement('span');
-            out.className = 'term-val';
-            out.textContent = line.out;
-            addLine(out.outerHTML);
-          }
-        } else if (line.brace) {
-          addLine(`<span class="term-brace">${line.brace}</span>`);
-        } else if (line.kv) {
-          addLine(`&nbsp;&nbsp;<span class="term-key">${line.kv[0]}</span>: <span class="term-val">${line.kv[1]}</span>,`);
-        } else if (line.arr) {
-          addLine(`&nbsp;&nbsp;&nbsp;&nbsp;<span class="term-str">${line.arr}</span>,`);
-        }
-        await new Promise(r => setTimeout(r, line.wait || 100));
-      }
-      // Final cursor
-      addLine('<span class="term-prompt">$ </span><span class="term-cursor"></span>');
-    }
-
-    setTimeout(runTerminal, 1200);
+   
+       /* ============================================
+       STATIC TERMINAL (Pre-typed)
+       ============================================ */
 
     function getTo(sel) {
       document.querySelector(sel).scrollIntoView({ behavior: 'smooth' });
       closeCmd();
     }
+    
     /* ============================================
        COMMAND PALETTE
        ============================================ */
@@ -2168,8 +1931,6 @@ loaderEl.classList.remove('glitching');
       { icon: '✉', text: 'Send Email', action: () => window.location.href = 'mailto:dan.aditya.0@gmail.com' },
       { icon: '↑', text: 'Back to Top', action: () => getTo('#top') },
     ];
-
-   
 
     function renderCommands(filter = '') {
       const list = document.getElementById('cmdList');
