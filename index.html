@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aditya Danapurkar · AI + Web3</title>
+  <title>Aditya Danapurkar · AI + Web3 Engineering</title>
   <meta name="description" content="Fullstack Blockchain Developer building AI-powered Web3 systems, autonomous agents, and scalable cloud infrastructure." />
   <meta name="theme-color" content="#08060F" />
 
@@ -1141,6 +1141,385 @@
       opacity: 1; transform: translateX(-50%) translateY(0);
     }
 
+    /* ============================================
+   GITHUB ACTIVITY SECTION
+   ============================================ */
+#github { border-top: 1px solid var(--border); }
+
+/* ===== MAIN CARD ===== */
+.gh-card {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(0, 229, 255, 0.05), transparent 35%),
+    var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  overflow: hidden;
+  isolation: isolate;
+  transition: border-color 0.3s, box-shadow 0.4s, transform 0.3s;
+}
+.gh-card:hover {
+  border-color: var(--border2);
+  box-shadow:
+    0 0 0 1px var(--border2),
+    0 30px 80px -20px rgba(0, 229, 255, 0.18);
+}
+
+/* Animated gradient sweep on top edge */
+.gh-border {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--sun),
+    var(--dusk),
+    var(--magenta),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: ghBorder 5s linear infinite;
+  z-index: 1;
+}
+@keyframes ghBorder {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* HUD corner brackets */
+.gh-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border2);
+  opacity: 0.45;
+  pointer-events: none;
+  transition: opacity 0.3s, border-color 0.3s;
+  z-index: 1;
+}
+.gh-card:hover .gh-corner { opacity: 0.9; border-color: var(--sun); }
+.gh-corner-tl { top: 14px;    left: 14px;    border-right: none; border-bottom: none; }
+.gh-corner-tr { top: 14px;    right: 14px;   border-left: none;  border-bottom: none; }
+.gh-corner-bl { bottom: 14px; left: 14px;    border-right: none; border-top: none; }
+.gh-corner-br { bottom: 14px; right: 14px;   border-left: none;  border-top: none; }
+
+/* ===== HEADER ===== */
+.gh-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.gh-head-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.gh-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--green);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(39, 201, 63, 0.08);
+  border: 1px solid rgba(39, 201, 63, 0.25);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  width: fit-content;
+}
+.gh-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2s infinite;
+}
+.gh-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.gh-handle {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+.gh-legend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.gh-legend-bar {
+  width: 100px;
+  height: 8px;
+  border-radius: 2px;
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(0, 229, 255, 0.4),
+    var(--sun),
+    var(--dusk)
+  );
+  border: 1px solid var(--border);
+}
+
+/* ===== GRAPH ===== */
+.gh-graph {
+  position: relative;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+  min-height: 140px;
+}
+.gh-graph::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  opacity: 0.5;
+  mask-image: radial-gradient(ellipse 90% 80% at center, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at center, black, transparent);
+}
+
+/* Scan line */
+.gh-scan {
+  position: absolute;
+  left: 0; right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--sun), transparent);
+  box-shadow:
+    0 0 12px var(--sun),
+    0 0 30px rgba(0, 229, 255, 0.4);
+  animation: ghScan 4s linear infinite;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+}
+@keyframes ghScan {
+  0%   { top: 0;                  opacity: 0; }
+  8%   {                            opacity: 0.85; }
+  92%  {                            opacity: 0.85; }
+  100% { top: calc(100% - 2px);   opacity: 0; }
+}
+
+/* Cells container */
+.gh-cells-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  min-height: 110px;
+  overflow-x: auto;
+  padding: 2px;
+  scrollbar-width: thin;
+}
+.gh-cells-wrap::-webkit-scrollbar { height: 4px; }
+.gh-cells-wrap::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* Loading skeleton */
+.gh-skeleton {
+  width: 100%;
+  height: 110px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0, 229, 255, 0.06),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: ghShimmer 1.5s linear infinite;
+  border-radius: 4px;
+}
+@keyframes ghShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Cells */
+.gh-cells {
+  display: inline-flex;
+  gap: 3px;
+}
+.gh-week {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.gh-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  position: relative;
+  cursor: none;
+  opacity: 0;
+  transform: scale(0.4);
+  animation: ghCellIn 0.4s var(--ease) forwards;
+  transition: transform 0.15s var(--ease), z-index 0s;
+}
+@keyframes ghCellIn {
+  to { opacity: 1; transform: scale(1); }
+}
+.gh-cell[data-level="1"] { background: rgba(0, 229, 255, 0.25); }
+.gh-cell[data-level="2"] { background: rgba(0, 229, 255, 0.5); }
+.gh-cell[data-level="3"] {
+  background: var(--sun);
+  box-shadow: 0 0 4px rgba(0, 229, 255, 0.4);
+}
+.gh-cell[data-level="4"] {
+  background: linear-gradient(135deg, var(--sun), var(--dusk));
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+.gh-cell:hover {
+  transform: scale(1.6);
+  z-index: 5;
+}
+
+/* Tooltip on cell hover */
+.gh-cell::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--text);
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  padding: 5px 9px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s, transform 0.15s;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+.gh-cell:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Error state */
+.gh-error {
+  width: 100%;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.gh-error strong { color: var(--sun); }
+.gh-error a {
+  color: var(--sun);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border2);
+  padding-bottom: 1px;
+  transition: border-color 0.2s;
+}
+.gh-error a:hover { border-color: var(--sun); }
+
+/* ===== MONTH LABELS ===== */
+.gh-months {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0.5rem 1.5rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--faint);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ===== STATS ===== */
+.gh-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.gh-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+.gh-stat:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(180deg, transparent, var(--border), transparent);
+}
+.gh-stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.gh-stat-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 860px) {
+  .gh-card { padding: 1.5rem; }
+  .gh-head { flex-direction: column; align-items: flex-start; }
+  .gh-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .gh-stat:nth-child(2)::after { display: none; }
+  .gh-cell { width: 10px; height: 10px; }
+  .gh-corner { width: 14px; height: 14px; }
+  .gh-corner-tl, .gh-corner-bl { left: 10px; }
+  .gh-corner-tl, .gh-corner-tr { top: 10px; }
+  .gh-corner-tr, .gh-corner-br { right: 10px; }
+  .gh-corner-bl, .gh-corner-br { bottom: 10px; }
+}
+@media (max-width: 540px) {
+  .gh-stat-value { font-size: 20px; }
+  .gh-title { font-size: 18px; }
+  .gh-legend { font-size: 9px; }
+  .gh-legend-bar { width: 70px; }
+}
+
     /* ===========================
        COMMAND PALETTE
        =========================== */
@@ -1480,6 +1859,79 @@
 </div>
     
     </section>
+
+    <section id="github" class="section">
+  <div class="section-header">
+    <div>
+      <div class="label reveal">Activity</div>
+      <h2 class="section-title reveal">GitHub <span>Activity</span></h2>
+    </div>
+    <a class="view-all reveal" href="https://github.com/ad-dan" target="_blank" rel="noopener">@ad-dan →</a>
+  </div>
+
+  <div class="gh-card reveal">
+    <!-- Animated gradient top border -->
+    <div class="gh-border"></div>
+
+    <!-- HUD corner brackets -->
+    <span class="gh-corner gh-corner-tl"></span>
+    <span class="gh-corner gh-corner-tr"></span>
+    <span class="gh-corner gh-corner-bl"></span>
+    <span class="gh-corner gh-corner-br"></span>
+
+    <!-- Header -->
+    <div class="gh-head">
+      <div class="gh-head-left">
+        <span class="gh-live">
+          <span class="gh-live-dot"></span>
+          Live
+        </span>
+        <div class="gh-title">Last year's contributions</div>
+        <div class="gh-handle">github.com/ad-dan</div>
+      </div>
+      <div class="gh-legend">
+        <span>Less</span>
+        <div class="gh-legend-bar"></div>
+        <span>More</span>
+      </div>
+    </div>
+
+    <!-- Graph -->
+    <div class="gh-graph">
+      <div class="gh-scan"></div>
+      <div class="gh-cells-wrap" id="ghGraph">
+        <div class="gh-skeleton"></div>
+      </div>
+    </div>
+
+    <!-- Month labels -->
+    <div class="gh-months" aria-hidden="true">
+      <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
+      <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
+      <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+    </div>
+
+    <!-- Stats -->
+    <div class="gh-stats">
+      <div class="gh-stat">
+        <div class="gh-stat-label">Contributions</div>
+        <div class="gh-stat-value" id="ghTotal">—</div>
+      </div>
+      <div class="gh-stat">
+        <div class="gh-stat-label">Active days</div>
+        <div class="gh-stat-value" id="ghActive">—</div>
+      </div>
+      <div class="gh-stat">
+        <div class="gh-stat-label">Current streak</div>
+        <div class="gh-stat-value" id="ghStreak">—</div>
+      </div>
+      <div class="gh-stat">
+        <div class="gh-stat-label">Longest streak</div>
+        <div class="gh-stat-value" id="ghLongest">—</div>
+      </div>
+    </div>
+  </div>
+</section>
 
     <section id="projects" class="section">
       <div class="section-header">
@@ -2168,6 +2620,155 @@
         if (cmdFiltered[cmdActiveIndex]) cmdFiltered[cmdActiveIndex].action();
       }
     });
+
+    /* ============================================
+   GITHUB CONTRIBUTION GRAPH (client-rendered)
+   ============================================ */
+const GH_USER = 'ad-dan';
+const GH_API  = `https://github-contributions-api.jogruber.de/v4/${GH_USER}?y=last`;
+
+/* ----- Helpers ----- */
+const getCount = d => d.contributionCount ?? d.count ?? 0;
+
+function getLevel(count) {
+  if (!count) return 0;
+  if (count <= 2) return 1;
+  if (count <= 5) return 2;
+  if (count <= 9) return 3;
+  return 4;
+}
+
+function fmtDate(d) {
+  return new Date(d).toLocaleDateString('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric'
+  });
+}
+
+function formatNumber(n) {
+  if (n >= 10000) return (n / 1000).toFixed(1) + 'K+';
+  if (n >= 1000)  return (n / 1000).toFixed(1) + 'K+';
+  return Math.floor(n).toLocaleString();
+}
+
+/* ----- Graph Builder ----- */
+function buildGraph(contributions) {
+  // Bucket into weeks (Sun-start like GitHub)
+  const weeks = [];
+  let week = new Array(7).fill(null);
+  let started = false;
+
+  contributions.forEach(day => {
+    const dow = new Date(day.date).getDay();
+    if (dow === 0 && started) {
+      weeks.push(week);
+      week = new Array(7).fill(null);
+    }
+    week[dow] = day;
+    started = true;
+  });
+  if (week.some(d => d)) weeks.push(week);
+
+  // Render with cascading reveal
+  let i = 0;
+  return weeks.map(w => `
+    <div class="gh-week">
+      ${w.map(d => {
+        if (!d) return '<div class="gh-cell" style="visibility:hidden"></div>';
+        const count = getCount(d);
+        const level = getLevel(count);
+        const tip = count === 0
+          ? `No contributions · ${fmtDate(d.date)}`
+          : `${count} contribution${count > 1 ? 's' : ''} · ${fmtDate(d.date)}`;
+        // Cap delay so the full reveal finishes in ~700ms
+        const delay = Math.min(i++ * 1.8, 700);
+        return `<div class="gh-cell" data-level="${level}" data-tip="${tip}" style="animation-delay:${delay}ms"></div>`;
+      }).join('')}
+    </div>
+  `).join('');
+}
+
+/* ----- Stats ----- */
+function computeStats(contributions) {
+  const total = contributions.reduce((s, d) => s + getCount(d), 0);
+  const activeDays = contributions.filter(d => getCount(d) > 0).length;
+
+  let currentStreak = 0;
+  for (let i = contributions.length - 1; i >= 0; i--) {
+    if (getCount(contributions[i]) > 0) currentStreak++;
+    else break;
+  }
+
+  let longestStreak = 0, run = 0;
+  contributions.forEach(d => {
+    if (getCount(d) > 0) { run++; longestStreak = Math.max(longestStreak, run); }
+    else run = 0;
+  });
+
+  return { total, activeDays, currentStreak, longestStreak };
+}
+
+/* ----- Animated Number ----- */
+function animateStat(id, target, formatter) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const duration = 1400;
+  const start = performance.now();
+  (function step(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = formatter(target * eased);
+    if (p < 1) requestAnimationFrame(step);
+  })(start);
+}
+
+/* ----- Main Loader ----- */
+async function loadGitHubGraph() {
+  const wrap = document.getElementById('ghGraph');
+  if (!wrap) return;
+
+  try {
+    const res = await fetch(GH_API);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const contributions = data.contributions || [];
+    if (!contributions.length) throw new Error('No data returned');
+
+    // Render cells
+    wrap.innerHTML = `<div class="gh-cells">${buildGraph(contributions)}</div>`;
+
+    // Animate stats
+    const stats = computeStats(contributions);
+    animateStat('ghTotal',   stats.total,        formatNumber);
+    animateStat('ghActive',  stats.activeDays,   v => Math.floor(v).toLocaleString());
+    animateStat('ghStreak',  stats.currentStreak, v => Math.floor(v) + 'd');
+    animateStat('ghLongest', stats.longestStreak, v => Math.floor(v) + 'd');
+
+  } catch (err) {
+    console.warn('GitHub graph failed:', err);
+    wrap.innerHTML = `
+      <div class="gh-error">
+        Couldn't load activity data right now.<br><br>
+        <strong>${err.message}</strong><br><br>
+        <a href="https://github.com/${GH_USER}" target="_blank" rel="noopener">
+          View profile on GitHub →
+        </a>
+      </div>
+    `;
+  }
+}
+
+/* ----- Lazy Load (only when section is in view) ----- */
+const ghObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      loadGitHubGraph();
+      ghObs.disconnect();
+    }
+  });
+}, { rootMargin: '200px' });
+
+const ghSection = document.getElementById('github');
+if (ghSection) ghObs.observe(ghSection);
 
     /* ============================================
        MOBILE MENU
