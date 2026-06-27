@@ -1289,7 +1289,7 @@
   padding: 1.25rem;
   overflow: hidden;
   margin-bottom: 0.5rem;
-  min-height: 140px;
+  /* min-height removed — let it adapt */
 }
 .gh-graph::before {
   content: '';
@@ -1327,20 +1327,17 @@
   100% { top: calc(100% - 2px);   opacity: 0; }
 }
 
-/* Cells container */
 .gh-cells-wrap {
   position: relative;
   z-index: 1;
+  width: 100%;
+  overflow: hidden;
   display: flex;
+  justify-content: center;
   align-items: center;
-  min-height: 110px;
-  overflow-x: auto;
-  padding: 2px;
-  scrollbar-width: thin;
+  min-height: 110px; /* keeps skeleton/loading state sized */
 }
-.gh-cells-wrap::-webkit-scrollbar { height: 4px; }
-.gh-cells-wrap::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-
+/* Delete the scrollbar styles below — no longer needed */
 /* Loading skeleton */
 .gh-skeleton {
   width: 100%;
@@ -1363,6 +1360,9 @@
 .gh-cells {
   display: inline-flex;
   gap: 3px;
+  padding: 2px;
+  transform-origin: center center;
+  transition: transform 0.4s var(--ease);
 }
 .gh-week {
   display: flex;
@@ -1947,7 +1947,7 @@
             <div class="proj-number">01 / Agentic AI</div>
             <div class="proj-title">ChainMind</div>
             <div class="proj-image">
-              <img src="./images/proj-1.jpeg" alt="ChainMind" loading="lazy" decoding="async" />
+              <img src="./images/proj-1.jpeg" alt="ChainMind"/>
               <div class="proj-image-overlay"></div>
             </div>
             <div class="proj-desc">AI-powered autonomous agents that execute complex blockchain operations on Solana and EVM networks through natural language commands.</div>
@@ -1968,7 +1968,7 @@
             <div class="proj-number">02 / Cloud Infra</div>
             <div class="proj-title">Geth Wraith</div>
             <div class="proj-image">
-              <img src="./images/proj-2.jpeg" alt="GethWraith" loading="lazy" decoding="async" />
+              <img src="./images/proj-2.jpeg" alt="GethWraith"/>
               <div class="proj-image-overlay"></div>
             </div>
             <div class="proj-desc">Real-time dashboard for monitoring and managing EVM blockchain nodes with deep visibility into health, performance, and network connectivity.</div>
@@ -1988,7 +1988,7 @@
             <div class="proj-number">03 / Governance</div>
             <div class="proj-title">Bao Dao</div>
             <div class="proj-image">
-              <img src="./images/proj-3.jpeg" alt="DAO" loading="lazy" decoding="async" />
+              <img src="./images/proj-3.jpeg" alt="DAO"/>
               <div class="proj-image-overlay"></div>
             </div>
             <div class="proj-desc">Full-stack DAO enabling gasless governance through meta-transactions, allowing members to vote on-chain without transaction fees.</div>
@@ -2008,7 +2008,7 @@
             <div class="proj-number">04 / DeFi</div>
             <div class="proj-title">Vex Dex</div>
             <div class="proj-image">
-              <img src="./images/proj-4.jpeg" alt="DEX" loading="lazy" decoding="async" />
+              <img src="./images/proj-4.jpeg" alt="DEX"/>
               <div class="proj-image-overlay"></div>
             </div>
             <div class="proj-desc">Decentralized cryptocurrency exchange on Ethereum enabling peer-to-peer trading directly from user wallets without intermediaries.</div>
@@ -2028,7 +2028,7 @@
             <div class="proj-number">05 / Marketplace</div>
             <div class="proj-title">NFT Marketplace</div>
             <div class="proj-image">
-              <img src="./images/proj-5.jpeg" alt="NFT" loading="lazy" decoding="async" />
+              <img src="./images/proj-5.jpeg" alt="NFT"/>
               <div class="proj-image-overlay"></div>
             </div>
             <div class="proj-desc">A fullstack NFT marketplace on Ethereum enabling users to mint, auction, buy, and sell NFTs with a modern Web3 interface.</div>
@@ -2048,7 +2048,7 @@
             <div class="proj-number">06 / Smart Contracts</div>
             <div class="proj-title">ERC Minter</div>
             <div class="proj-image">
-              <img src="./images/proj-6.jpeg" alt="Minter" loading="lazy" decoding="async" />
+              <img src="./images/proj-6.jpeg" alt="Minter"/>
               <div class="proj-image-overlay"></div>
             </div>
             <div class="proj-desc">Smart contract system where users spend ERC-20 tokens to mint unique ERC-721 NFTs, creating a token-gated on-chain minting mechanism.</div>
@@ -2650,6 +2650,41 @@ function formatNumber(n) {
   return Math.floor(n).toLocaleString();
 }
 
+/* ============================================
+   RESPONSIVE GRAPH FIT
+   Scales entire graph to container width
+   ============================================ */
+function fitGraphToContainer() {
+  const wrap  = document.querySelector('.gh-cells-wrap');
+  const cells = document.querySelector('.gh-cells');
+  if (!wrap || !cells) return;
+
+  // Reset to natural size to measure correctly
+  cells.style.transform = 'none';
+
+  // Wait one frame so layout settles
+  requestAnimationFrame(() => {
+    const wrapWidth   = wrap.clientWidth;
+    const cellsWidth  = cells.scrollWidth;
+    const cellsHeight = cells.scrollHeight;
+
+    if (cellsWidth <= 0 || wrapWidth <= 0) return;
+
+    // Always scale to fit container width (both smaller AND larger)
+    const scale = wrapWidth / cellsWidth;
+    cells.style.transform = `scale(${scale})`;
+
+    // Make wrap tall enough to hold the scaled graph
+    wrap.style.height = (cellsHeight * scale) + 'px';
+  });
+}
+// Debounced resize handler
+let fitTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(fitTimer);
+  fitTimer = setTimeout(fitGraphToContainer, 100);
+});
+
 /* ----- Graph Builder ----- */
 function buildGraph(contributions) {
   // Bucket into weeks (Sun-start like GitHub)
@@ -2735,6 +2770,7 @@ async function loadGitHubGraph() {
 
     // Render cells
     wrap.innerHTML = `<div class="gh-cells">${buildGraph(contributions)}</div>`;
+    fitGraphToContainer();   
 
     // Animate stats
     const stats = computeStats(contributions);
