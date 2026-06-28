@@ -13,6 +13,9 @@
   <meta property="og:description" content="Fullstack Blockchain Developer building AI-powered Web3 systems." />
   <meta property="og:type" content="profile" />
 
+  <!-- Add to <head> -->
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -211,6 +214,14 @@
     /* ===========================
        NAV
        =========================== */
+    iconify-icon {
+  color: var(--sun);
+  transition: color 0.2s, transform 0.2s;
+}
+iconify-icon:hover {
+  color: var(--dusk);
+  transform: scale(1.1);
+}
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; justify-content: space-between; align-items: center;
@@ -1847,7 +1858,7 @@
       <div class="now-grid">
         <div class="now-card reveal">
           <div class="now-head">
-            <div class="now-icon cyan">🔨</div>
+            <div class="now-icon cyan"><iconify-icon icon="lucide:hammer" ></iconify-icon></div>
             <div class="now-label">Building</div>
           </div>
           <div class="now-title">Agentic Auditor</div>
@@ -1856,7 +1867,7 @@
         </div>
         <div class="now-card reveal reveal-delay-1">
           <div class="now-head">
-            <div class="now-icon pink">📚</div>
+            <div class="now-icon pink"><iconify-icon icon="lucide:book" ></iconify-icon></div>
             <div class="now-label">Learning</div>
           </div>
           <div class="now-title">OpenClaw</div>
@@ -1959,7 +1970,7 @@
             </div>
             <div class="proj-footer">
               <span class="proj-tag tag-oss">Agentic AI</span>
-              <span class="proj-arrow">↗</span>
+              <span class="proj-arrow"><iconify-icon icon="lucide:arrow-up-right" ></iconify-icon></span>
             </div>
           </div>
         </a>
@@ -1979,7 +1990,7 @@
             </div>
             <div class="proj-footer">
               <span class="proj-tag tag-oss">Node Infrastructure</span>
-              <span class="proj-arrow">↗</span>
+              <span class="proj-arrow"><iconify-icon icon="lucide:arrow-up-right" ></iconify-icon></span>
             </div>
           </div>
         </a>
@@ -1999,7 +2010,7 @@
             </div>
             <div class="proj-footer">
               <span class="proj-tag tag-oss">DAO Governance</span>
-              <span class="proj-arrow">↗</span>
+              <span class="proj-arrow"><iconify-icon icon="lucide:arrow-up-right" ></iconify-icon></span>
             </div>
           </div>
         </a>
@@ -2019,7 +2030,7 @@
             </div>
             <div class="proj-footer">
               <span class="proj-tag tag-web">DeFi</span>
-              <span class="proj-arrow">↗</span>
+              <span class="proj-arrow"><iconify-icon icon="lucide:arrow-up-right" ></iconify-icon></span>
             </div>
           </div>
         </a>
@@ -2039,7 +2050,7 @@
             </div>
             <div class="proj-footer">
               <span class="proj-tag tag-web">Fullstack</span>
-              <span class="proj-arrow">↗</span>
+              <span class="proj-arrow"><iconify-icon icon="lucide:arrow-up-right" ></iconify-icon></span>
             </div>
           </div>
         </a>
@@ -2059,7 +2070,7 @@
             </div>
             <div class="proj-footer">
               <span class="proj-tag tag-web">Smart Contracts</span>
-              <span class="proj-arrow">↗</span>
+              <span class="proj-arrow"><iconify-icon icon="lucide:arrow-up-right" ></iconify-icon></span>
             </div>
           </div>
         </a>
@@ -2076,7 +2087,7 @@
       <div class="social-platforms">
         <a class="platform-card gh reveal" href="https://github.com/ad-dan" target="_blank" rel="noopener">
           <div class="platform-top">
-            <div class="platform-icon gh-ic">🐙</div>
+            <div class="platform-icon gh-ic"><iconify-icon icon="lucide:github" ></iconify-icon></div>
             <span class="platform-badge badge-gh">Active</span>
           </div>
           <div class="platform-name">GitHub</div>
@@ -2086,7 +2097,7 @@
         </a>
         <a class="platform-card li reveal reveal-delay-1" href="https://www.linkedin.com/in/aditya-danapurkar-596102149/" target="_blank" rel="noopener">
           <div class="platform-top">
-            <div class="platform-icon li-ic">💼</div>
+            <div class="platform-icon li-ic"><iconify-icon icon="lucide:briefcase" ></iconify-icon></div>
             <span class="platform-badge badge-li">Open</span>
           </div>
           <div class="platform-name">LinkedIn</div>
@@ -2096,7 +2107,7 @@
         </a>
         <a class="platform-card pt reveal reveal-delay-2" href="https://adityadanapurkar.com" target="_blank" rel="noopener">
           <div class="platform-top">
-            <div class="platform-icon pt-ic">🎨</div>
+            <div class="platform-icon pt-ic"><iconify-icon icon="lucide:terminal" ></iconify-icon></div>
             <span class="platform-badge badge-pt">Live</span>
           </div>
           <div class="platform-name">Portfolio</div>
@@ -2152,20 +2163,20 @@
 
   <div class="dock">
     <a class="dock-item" href="#hero" aria-label="Home">
-      🏠
+      <iconify-icon icon="lucide:home"></iconify-icon>
       <span class="dock-tooltip">Home</span>
     </a>
     <a class="dock-item" href="https://github.com/ad-dan" target="_blank" rel="noopener" aria-label="GitHub">
-      🐙
+      <iconify-icon icon="lucide:github" ></iconify-icon>
       <span class="ping" aria-hidden="true"></span>
       <span class="dock-tooltip">GitHub</span>
     </a>
     <a class="dock-item" href="https://www.linkedin.com/in/aditya-danapurkar-596102149/" target="_blank" rel="noopener" aria-label="LinkedIn">
-      💼
+      <iconify-icon icon="lucide:briefcase"></iconify-icon>
       <span class="dock-tooltip">LinkedIn</span>
     </a>
     <a class="dock-item" href="mailto:dan.aditya.0@gmail.com" aria-label="Email">
-      ✉️
+      <iconify-icon icon="lucide:mail"></iconify-icon>
       <span class="dock-tooltip">Email</span>
     </a>
   </div>
@@ -2548,16 +2559,16 @@
        COMMAND PALETTE (with keyboard nav)
        ============================================ */
     const commands = [
-      { icon: '👤', text: 'Go to About', action: () => scrollTo('#about') },
-      { icon: '⚡', text: 'Go to Now', action: () => scrollTo('#now') },
-      { icon: '🛠', text: 'Go to Projects', action: () => scrollTo('#projects') },
-            { icon: '🌐', text: 'Go to Social', action: () => scrollTo('#social') },
-      { icon: '✉', text: 'Go to Contact', action: () => scrollTo('#contact') },
-      { icon: '🐙', text: 'Open GitHub', action: () => window.open('https://github.com/ad-dan', '_blank') },
-      { icon: '💼', text: 'Open LinkedIn', action: () => window.open('https://www.linkedin.com/in/aditya-danapurkar-596102149/', '_blank') },
-      { icon: '✈', text: 'Open Telegram', action: () => window.open('https://t.me/danaditya0', '_blank') },
-      { icon: '✉', text: 'Send Email', action: () => window.location.href = 'mailto:dan.aditya.0@gmail.com' },
-      { icon: '↑', text: 'Back to Top', action: () => scrollTo('#top') },
+      { icon: '<iconify-icon icon="lucide:target" ></iconify-icon>', text: 'Go to About', action: () => scrollTo('#about') },
+      { icon: '<iconify-icon icon="lucide:zap" ></iconify-icon>', text: 'Go to Now', action: () => scrollTo('#now') },
+      { icon: '<iconify-icon icon="lucide:toolbox" ></iconify-icon>', text: 'Go to Projects', action: () => scrollTo('#projects') },
+            { icon: '<iconify-icon icon="lucide:globe" ></iconify-icon>', text: 'Go to Social', action: () => scrollTo('#social') },
+      { icon: '<iconify-icon icon="lucide:mail" ></iconify-icon>', text: 'Go to Contact', action: () => scrollTo('#contact') },
+      { icon: '<iconify-icon icon="lucide:github" ></iconify-icon>', text: 'Open GitHub', action: () => window.open('https://github.com/ad-dan', '_blank') },
+      { icon: '<iconify-icon icon="lucide:briefcase" ></iconify-icon>', text: 'Open LinkedIn', action: () => window.open('https://www.linkedin.com/in/aditya-danapurkar-596102149/', '_blank') },
+      { icon: '<iconify-icon icon="lucide:plane" ></iconify-icon>', text: 'Open Telegram', action: () => window.open('https://t.me/danaditya0', '_blank') },
+      { icon: '<iconify-icon icon="lucide:mail" ></iconify-icon>', text: 'Send Email', action: () => window.location.href = 'mailto:dan.aditya.0@gmail.com' },
+      { icon: '<iconify-icon icon="lucide:arrow-up" ></iconify-icon>', text: 'Back to Top', action: () => scrollTo('#top') },
     ];
 
     let cmdActiveIndex = 0;
