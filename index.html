@@ -15,17 +15,13 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
   <style>
     /* ===========================
        RESET & ROOT
        =========================== */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --bg: #08060F;
@@ -35,7 +31,7 @@
       --border: rgba(255,46,136,0.10);
       --border2: rgba(0,240,255,0.22);
       --text: #F8F2FF;
-      --muted: #A997C8;
+      --muted: #B8A7D5;        /* ↑ brighter for readability */
       --faint: #51406F;
       --sun: #00F0FF;
       --sun2: #00A8FF;
@@ -46,6 +42,9 @@
       --green: #27C93F;
       --r: 10px;
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --shadow-card: 0 20px 50px -20px rgba(0,0,0,0.6);
+      --shadow-glow-cyan: 0 0 30px rgba(0,240,255,0.15), 0 20px 40px -10px rgba(0,240,255,0.08);
+      --shadow-glow-dusk: 0 0 30px rgba(255,46,136,0.12), 0 20px 40px -10px rgba(255,46,136,0.08);
     }
 
     ::selection { background: var(--sun); color: var(--bg); }
@@ -76,6 +75,16 @@
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
       }
+    }
+
+    /* ===========================
+       PERFORMANCE: content-visibility
+       Skip rendering for below-the-fold sections.
+       NEVER apply to #hero (above the fold).
+       =========================== */
+    #about, #now, #github, #projects, #social, #contact {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 1000px;
     }
 
     /* ===========================
@@ -117,7 +126,6 @@
       border-radius: 50%;
       filter: blur(80px);
       opacity: 0.35;
-      will-change: transform;
     }
     .orb-1 {
       width: 420px; height: 420px;
@@ -197,7 +205,7 @@
       background: linear-gradient(90deg, var(--sun), var(--dusk), var(--magenta));
       z-index: 1000;
       transition: width 0.1s linear;
-      box-shadow: 0 0 12px var(--sun);
+      box-shadow: 0 0 16px var(--sun), 0 0 6px var(--dusk);
     }
 
     /* ===========================
@@ -208,14 +216,15 @@
       display: flex; justify-content: space-between; align-items: center;
       padding: 0 3rem; height: 64px;
       background: rgba(8, 6, 15, 0.6);
-      backdrop-filter: blur(24px) saturate(180%);
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px) saturate(200%);
       border-bottom: 1px solid var(--border);
       transition: background 0.3s, border-color 0.3s;
     }
     nav.scrolled {
-      background: rgba(8, 6, 15, 0.85);
+      background: rgba(8, 6, 15, 0.88);
       border-bottom-color: var(--border2);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.3);
     }
     .nav-left { display: flex; align-items: center; gap: 2rem; }
     .nav-logo {
@@ -273,10 +282,18 @@
     }
 
     /* ===========================
-       MAIN
+       MAIN & SECTIONS
        =========================== */
     main { position: relative; z-index: 1; }
     .section { max-width: 1100px; margin: 0 auto; padding: 6rem 3rem; position: relative; }
+    /* Accent line at top of each section */
+    .section::before {
+      content: ''; position: absolute;
+      top: 0; left: 50%; width: 1px; height: 60px;
+      background: linear-gradient(180deg, transparent, var(--border2), transparent);
+      transform: translateX(-50%);
+      opacity: 0.5;
+    }
 
     .label {
       display: inline-flex; align-items: center; gap: 8px;
@@ -289,8 +306,14 @@
     /* ===========================
        HERO
        =========================== */
-    #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 64px; }
-    .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; align-items: center; }
+    #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 64px; position: relative; }
+    /* Spotlight that follows cursor */
+    .hero-spotlight {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(circle 400px at var(--sx, 50%) var(--sy, 50%), rgba(0,240,255,0.06), transparent 60%);
+      transition: background 0.3s ease;
+    }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 1; }
 
     .hero-status {
       display: inline-flex; align-items: center; gap: 8px;
@@ -316,10 +339,7 @@
     }
     .hero-name .line1 { display: block; color: var(--text); }
     .hero-name .line2 { display: block; color: transparent; -webkit-text-stroke: 1.5px var(--dusk); }
-    .hero-name .line3 {
-      display: block; color: var(--sun);
-      position: relative; display: inline-block;
-    }
+    .hero-name .line3 { display: block; color: var(--sun); position: relative; display: inline-block; }
     .glitch { position: relative; }
     .glitch::before, .glitch::after {
       content: attr(data-text);
@@ -357,19 +377,13 @@
       min-height: 28px;
     }
     .hero-scramble .label-prefix { color: var(--sun); }
-    .hero-scramble .scramble {
-      color: var(--blush); font-weight: 700;
-      position: relative;
-    }
+    .hero-scramble .scramble { color: var(--blush); font-weight: 700; position: relative; }
     .hero-scramble .scramble::after {
-      content: '|';
-      color: var(--sun);
+      content: '|'; color: var(--sun);
       animation: caret 1s steps(2) infinite;
       margin-left: 2px;
     }
-    @keyframes caret {
-      50% { opacity: 0; }
-    }
+    @keyframes caret { 50% { opacity: 0; } }
     .dud { color: var(--sun); opacity: 0.6; }
 
     .hero-desc {
@@ -385,11 +399,12 @@
       letter-spacing: 0.04em; text-transform: uppercase;
       padding: 16px 30px;
       border: none; border-radius: 6px; text-decoration: none;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.2s, color 0.2s, box-shadow 0.3s;
       cursor: none; overflow: hidden;
     }
     .btn-primary {
       background: var(--sun); color: var(--bg);
+      box-shadow: 0 4px 20px rgba(0,240,255,0.3);
     }
     .btn-primary::before {
       content: '';
@@ -398,13 +413,19 @@
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
       transition: left 0.6s ease;
     }
-    .btn-primary:hover { background: var(--sun2); }
+    .btn-primary:hover {
+      background: var(--sun2);
+      box-shadow: 0 6px 30px rgba(0,240,255,0.5);
+    }
     .btn-primary:hover::before { left: 100%; }
     .btn-ghost {
       background: transparent; color: var(--text);
       border: 1px solid var(--border2);
     }
-    .btn-ghost:hover { border-color: var(--sun); color: var(--sun); }
+    .btn-ghost:hover {
+      border-color: var(--sun); color: var(--sun);
+      box-shadow: 0 0 20px rgba(0,240,255,0.15);
+    }
 
     .magnetic { transition: transform 0.2s ease-out; }
 
@@ -417,7 +438,7 @@
       border-radius: 12px; overflow: hidden;
       font-family: 'JetBrains Mono', monospace;
       box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5),
-                  0 0 40px rgba(0, 240, 255, 0.05);
+                  0 0 40px rgba(0, 240, 255, 0.08);
       transform: perspective(1000px) rotateY(-3deg) rotateX(2deg);
       transition: transform 0.4s;
       position: relative;
@@ -430,6 +451,7 @@
                   linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
       background-size: 100% 4px, 3px 100%;
       pointer-events: none; border-radius: 12px;
+      opacity: 0.5;
     }
     .term-bar {
       background: var(--card);
@@ -481,7 +503,7 @@
       border: 1px solid var(--border);
       border-radius: var(--r);
       padding: 1.4rem;
-      transition: border-color 0.3s, transform 0.3s;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
       position: relative; overflow: hidden;
     }
     .stat-card::before {
@@ -489,7 +511,10 @@
       background: radial-gradient(circle at top right, rgba(0,240,255,0.1), transparent 70%);
       opacity: 0; transition: opacity 0.3s;
     }
-    .stat-card:hover { border-color: var(--sun); transform: translateY(-2px); }
+    .stat-card:hover {
+      border-color: var(--sun); transform: translateY(-4px);
+      box-shadow: var(--shadow-glow-cyan);
+    }
     .stat-card:hover::before { opacity: 1; }
     .stat-num {
       font-family: 'Space Mono', monospace;
@@ -537,6 +562,7 @@
       border-color: var(--sun); color: var(--sun);
       background: rgba(0, 240, 255, 0.05);
       transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,240,255,0.1);
     }
 
     .skill-bars { margin-top: 2rem; display: grid; gap: 14px; }
@@ -584,6 +610,7 @@
       display: flex; align-items: center; gap: 3rem;
       letter-spacing: -0.02em;
       opacity: 0.4;
+      transition: opacity 0.2s, color 0.2s;
     }
     .marquee-item:hover { opacity: 0.9; color: var(--sun); }
     .marquee-item .dot {
@@ -611,7 +638,7 @@
       border-radius: 14px;
       padding: 1.6rem;
       position: relative; overflow: hidden;
-      transition: border-color 0.3s, transform 0.3s;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
     }
     .now-card::before {
       content: ''; position: absolute;
@@ -619,7 +646,10 @@
       background: linear-gradient(90deg, transparent, var(--sun), transparent);
       opacity: 0; transition: opacity 0.3s;
     }
-    .now-card:hover { border-color: var(--border2); transform: translateY(-3px); }
+    .now-card:hover {
+      border-color: var(--border2); transform: translateY(-5px);
+      box-shadow: var(--shadow-glow-cyan);
+    }
     .now-card:hover::before { opacity: 1; }
     .now-head {
       display: flex; align-items: center; gap: 12px;
@@ -665,32 +695,6 @@
       box-shadow: 0 0 6px rgba(0,240,255,0.5);
     }
 
-    .audio-viz {
-      display: flex; align-items: flex-end;
-      gap: 3px; height: 28px;
-      margin-top: 0.5rem;
-    }
-    .audio-viz span {
-      display: inline-block;
-      width: 3px;
-      background: linear-gradient(180deg, var(--sun), var(--magenta));
-      border-radius: 2px;
-      animation: vizBar 1.2s ease-in-out infinite;
-      transform-origin: bottom;
-    }
-    .audio-viz span:nth-child(1) { height: 30%; animation-delay: 0s; }
-    .audio-viz span:nth-child(2) { height: 70%; animation-delay: 0.1s; }
-    .audio-viz span:nth-child(3) { height: 50%; animation-delay: 0.2s; }
-    .audio-viz span:nth-child(4) { height: 90%; animation-delay: 0.3s; }
-    .audio-viz span:nth-child(5) { height: 60%; animation-delay: 0.4s; }
-    .audio-viz span:nth-child(6) { height: 80%; animation-delay: 0.5s; }
-    .audio-viz span:nth-child(7) { height: 40%; animation-delay: 0.6s; }
-    .audio-viz span:nth-child(8) { height: 65%; animation-delay: 0.7s; }
-    @keyframes vizBar {
-      0%, 100% { transform: scaleY(1); }
-      50% { transform: scaleY(0.3); }
-    }
-
     .now-tag {
       display: inline-flex; align-items: center; gap: 6px;
       font-family: 'Space Mono', monospace;
@@ -714,7 +718,19 @@
       font-size: clamp(36px, 5vw, 56px);
       font-weight: 800; letter-spacing: -0.03em; line-height: 1;
     }
-    .section-title span { color: var(--sun); }
+    /* Animated gradient text on the span */
+    .section-title span {
+      background: linear-gradient(90deg, var(--sun), var(--dusk), var(--magenta), var(--sun));
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 6s linear infinite;
+    }
+    @keyframes gradientShift {
+      0%   { background-position: 0% 0; }
+      100% { background-position: 300% 0; }
+    }
     .view-all {
       font-family: 'Space Mono', monospace;
       font-size: 11px; color: var(--muted);
@@ -762,7 +778,8 @@
     }
     .proj-card:hover {
       border-color: var(--border2);
-      box-shadow: 0 20px 40px -10px rgba(0, 240, 255, 0.15);
+      box-shadow: 0 20px 40px -10px rgba(0, 240, 255, 0.2),
+                  0 0 30px rgba(0, 240, 255, 0.08);
     }
     .proj-card:hover::before { transform: scaleX(1); }
     .proj-card:hover::after { opacity: 1; }
@@ -783,7 +800,6 @@
       object-fit: cover;
       display: block;
       transition: transform 0.5s var(--ease);
-      will-change: transform;
     }
     .proj-card:hover .proj-image img { transform: scale(1.08); }
     .proj-image::after {
@@ -852,6 +868,7 @@
       background: var(--sun); color: var(--bg);
       border-color: var(--sun);
       transform: rotate(-45deg);
+      box-shadow: 0 0 15px rgba(0,240,255,0.4);
     }
 
     /* ===========================
@@ -878,13 +895,13 @@
       inset: 0; opacity: 0; transition: opacity 0.3s;
       border-radius: 14px; pointer-events: none;
     }
-    .platform-card:hover { transform: translateY(-4px); }
+    .platform-card:hover { transform: translateY(-6px); }
     .platform-card.gh::after { background: radial-gradient(ellipse at top left, rgba(0,240,255,0.13) 0%, transparent 65%); }
     .platform-card.li::after { background: radial-gradient(ellipse at top left, rgba(0,240,255,0.11) 0%, transparent 65%); }
     .platform-card.pt::after { background: radial-gradient(ellipse at top left, rgba(255,107,193,0.11) 0%, transparent 65%); }
-    .platform-card.gh:hover { border-color: var(--sun); }
-    .platform-card.li:hover { border-color: var(--sun); }
-    .platform-card.pt:hover { border-color: var(--blush); }
+    .platform-card.gh:hover { border-color: var(--sun); box-shadow: var(--shadow-glow-cyan); }
+    .platform-card.li:hover { border-color: var(--sun); box-shadow: var(--shadow-glow-cyan); }
+    .platform-card.pt:hover { border-color: var(--blush); box-shadow: var(--shadow-glow-dusk); }
     .platform-card:hover::after { opacity: 1; }
 
     .platform-top {
@@ -956,7 +973,14 @@
       font-weight: 800; letter-spacing: -0.04em;
       line-height: 1; margin-bottom: 1.5rem;
     }
-    .contact-big span { color: var(--sun); }
+    .contact-big span {
+      background: linear-gradient(90deg, var(--sun), var(--dusk), var(--magenta), var(--sun));
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 6s linear infinite;
+    }
     .contact-desc {
       font-size: 16px; color: var(--muted);
       line-height: 1.8; margin-bottom: 2.5rem;
@@ -979,7 +1003,10 @@
       background: linear-gradient(90deg, transparent, rgba(0,240,255,0.1), transparent);
       transition: left 0.6s;
     }
-    .contact-email-link:hover { border-color: var(--sun); }
+    .contact-email-link:hover {
+      border-color: var(--sun);
+      box-shadow: var(--shadow-glow-cyan);
+    }
     .contact-email-link:hover::before { left: 100%; }
     .socials-grid { display: flex; flex-wrap: wrap; gap: 10px; }
     .social-pill {
@@ -996,6 +1023,7 @@
       color: var(--sun); border-color: var(--sun);
       background: rgba(0, 240, 255, 0.05);
       transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,240,255,0.15);
     }
     .contact-illustration {
       background: var(--bg3);
@@ -1004,7 +1032,7 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 13px; line-height: 1.9;
       position: relative;
-      box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
+      box-shadow: var(--shadow-card);
       overflow: hidden;
     }
     .contact-illustration::before {
@@ -1069,9 +1097,7 @@
       font-family: 'Space Mono', monospace;
       font-size: 11px; color: var(--muted);
     }
-    .footer-stat {
-      display: flex; align-items: center; gap: 6px;
-    }
+    .footer-stat { display: flex; align-items: center; gap: 6px; }
     .footer-stat strong { color: var(--sun); font-weight: 700; }
     .footer-right { display: flex; gap: 1.5rem; flex-wrap: wrap; }
     .footer-right a {
@@ -1091,11 +1117,12 @@
       display: flex; gap: 8px;
       padding: 10px;
       background: rgba(16, 11, 31, 0.7);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      backdrop-filter: blur(24px) saturate(200%);
+      -webkit-backdrop-filter: blur(24px) saturate(200%);
       border: 1px solid var(--border2);
       border-radius: 16px;
-      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5),
+                  0 0 30px rgba(0,240,255,0.05);
     }
     .dock-item {
       position: relative;
@@ -1110,10 +1137,10 @@
       cursor: none;
     }
     .dock-item:hover {
-      transform: translateY(-6px) scale(1.1);
+      transform: translateY(-8px) scale(1.1);
       background: var(--card);
       border-color: var(--sun);
-      box-shadow: 0 10px 20px -5px rgba(0, 240, 255, 0.3);
+      box-shadow: 0 10px 25px -5px rgba(0, 240, 255, 0.4);
     }
     .dock-item .ping {
       position: absolute;
@@ -1142,383 +1169,361 @@
     }
 
     /* ============================================
-   GITHUB ACTIVITY SECTION
-   ============================================ */
-#github { border-top: 1px solid var(--border); }
+       GITHUB ACTIVITY SECTION
+       ============================================ */
+    #github { border-top: 1px solid var(--border); }
 
-/* ===== MAIN CARD ===== */
-.gh-card {
-  position: relative;
-  background:
-    linear-gradient(180deg, rgba(0, 229, 255, 0.05), transparent 35%),
-    var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 2.5rem;
-  overflow: hidden;
-  isolation: isolate;
-  transition: border-color 0.3s, box-shadow 0.4s, transform 0.3s;
-}
-.gh-card:hover {
-  border-color: var(--border2);
-  box-shadow:
-    0 0 0 1px var(--border2),
-    0 30px 80px -20px rgba(0, 229, 255, 0.18);
-}
+    .gh-card {
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(0, 229, 255, 0.05), transparent 35%),
+        var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      overflow: hidden;
+      isolation: isolate;
+      transition: border-color 0.3s, box-shadow 0.4s, transform 0.3s;
+    }
+    .gh-card:hover {
+      border-color: var(--border2);
+      box-shadow:
+        0 0 0 1px var(--border2),
+        0 30px 80px -20px rgba(0, 229, 255, 0.18);
+    }
 
-/* Animated gradient sweep on top edge */
-.gh-border {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--sun),
-    var(--dusk),
-    var(--magenta),
-    transparent
-  );
-  background-size: 200% 100%;
-  animation: ghBorder 5s linear infinite;
-  z-index: 1;
-}
-@keyframes ghBorder {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+    .gh-border {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--sun),
+        var(--dusk),
+        var(--magenta),
+        transparent
+      );
+      background-size: 200% 100%;
+      animation: ghBorder 5s linear infinite;
+      z-index: 1;
+    }
+    @keyframes ghBorder {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
 
-/* HUD corner brackets */
-.gh-corner {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border: 1.5px solid var(--border2);
-  opacity: 0.45;
-  pointer-events: none;
-  transition: opacity 0.3s, border-color 0.3s;
-  z-index: 1;
-}
-.gh-card:hover .gh-corner { opacity: 0.9; border-color: var(--sun); }
-.gh-corner-tl { top: 14px;    left: 14px;    border-right: none; border-bottom: none; }
-.gh-corner-tr { top: 14px;    right: 14px;   border-left: none;  border-bottom: none; }
-.gh-corner-bl { bottom: 14px; left: 14px;    border-right: none; border-top: none; }
-.gh-corner-br { bottom: 14px; right: 14px;   border-left: none;  border-top: none; }
+    .gh-corner {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--border2);
+      opacity: 0.45;
+      pointer-events: none;
+      transition: opacity 0.3s, border-color 0.3s;
+      z-index: 1;
+    }
+    .gh-card:hover .gh-corner { opacity: 0.9; border-color: var(--sun); }
+    .gh-corner-tl { top: 14px;    left: 14px;    border-right: none; border-bottom: none; }
+    .gh-corner-tr { top: 14px;    right: 14px;   border-left: none;  border-bottom: none; }
+    .gh-corner-bl { bottom: 14px; left: 14px;    border-right: none; border-top: none; }
+    .gh-corner-br { bottom: 14px; right: 14px;   border-left: none;  border-top: none; }
 
-/* ===== HEADER ===== */
-.gh-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 2rem;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-.gh-head-left {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.gh-live {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  color: var(--green);
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(39, 201, 63, 0.08);
-  border: 1px solid rgba(39, 201, 63, 0.25);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 600;
-  width: fit-content;
-}
-.gh-live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
-  animation: pulse 2s infinite;
-}
-.gh-title {
-  font-family: 'Syne', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-.gh-handle {
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  color: var(--muted);
-  letter-spacing: 0.02em;
-}
-.gh-legend {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  color: var(--faint);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.gh-legend-bar {
-  width: 100px;
-  height: 8px;
-  border-radius: 2px;
-  background: linear-gradient(90deg,
-    rgba(255, 255, 255, 0.05),
-    rgba(0, 229, 255, 0.4),
-    var(--sun),
-    var(--dusk)
-  );
-  border: 1px solid var(--border);
-}
+    .gh-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .gh-head-left { display: flex; flex-direction: column; gap: 8px; }
+    .gh-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--green);
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(39, 201, 63, 0.08);
+      border: 1px solid rgba(39, 201, 63, 0.25);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      width: fit-content;
+    }
+    .gh-live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+    .gh-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .gh-handle {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+    .gh-legend {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--faint);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .gh-legend-bar {
+      width: 100px;
+      height: 8px;
+      border-radius: 2px;
+      background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0.05),
+        rgba(0, 229, 255, 0.4),
+        var(--sun),
+        var(--dusk)
+      );
+      border: 1px solid var(--border);
+    }
 
-/* ===== GRAPH ===== */
-.gh-graph {
-  position: relative;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1.25rem;
-  overflow: hidden;
-  margin-bottom: 0.5rem;
-  /* min-height removed — let it adapt */
-}
-.gh-graph::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
-  background-size: 20px 20px;
-  pointer-events: none;
-  opacity: 0.5;
-  mask-image: radial-gradient(ellipse 90% 80% at center, black, transparent);
-  -webkit-mask-image: radial-gradient(ellipse 90% 80% at center, black, transparent);
-}
+    .gh-graph {
+      position: relative;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+    .gh-graph::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+      pointer-events: none;
+      opacity: 0.5;
+      mask-image: radial-gradient(ellipse 90% 80% at center, black, transparent);
+      -webkit-mask-image: radial-gradient(ellipse 90% 80% at center, black, transparent);
+    }
 
-/* Scan line */
-.gh-scan {
-  position: absolute;
-  left: 0; right: 0;
-  top: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--sun), transparent);
-  box-shadow:
-    0 0 12px var(--sun),
-    0 0 30px rgba(0, 229, 255, 0.4);
-  animation: ghScan 4s linear infinite;
-  pointer-events: none;
-  z-index: 4;
-  opacity: 0;
-}
-@keyframes ghScan {
-  0%   { top: 0;                  opacity: 0; }
-  8%   {                            opacity: 0.85; }
-  92%  {                            opacity: 0.85; }
-  100% { top: calc(100% - 2px);   opacity: 0; }
-}
+    .gh-scan {
+      position: absolute;
+      left: 0; right: 0;
+      top: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--sun), transparent);
+      box-shadow:
+        0 0 12px var(--sun),
+        0 0 30px rgba(0, 229, 255, 0.4);
+      animation: ghScan 4s linear infinite;
+      pointer-events: none;
+      z-index: 4;
+      opacity: 0;
+    }
+    @keyframes ghScan {
+      0%   { top: 0;                  opacity: 0; }
+      8%   {                            opacity: 0.85; }
+      92%  {                            opacity: 0.85; }
+      100% { top: calc(100% - 2px);   opacity: 0; }
+    }
 
-.gh-cells-wrap {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 110px; /* keeps skeleton/loading state sized */
-}
-/* Delete the scrollbar styles below — no longer needed */
-/* Loading skeleton */
-.gh-skeleton {
-  width: 100%;
-  height: 110px;
-  background: linear-gradient(90deg,
-    transparent,
-    rgba(0, 229, 255, 0.06),
-    transparent
-  );
-  background-size: 200% 100%;
-  animation: ghShimmer 1.5s linear infinite;
-  border-radius: 4px;
-}
-@keyframes ghShimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+    .gh-cells-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 110px;
+    }
+    .gh-skeleton {
+      width: 100%;
+      height: 110px;
+      background: linear-gradient(90deg,
+        transparent,
+        rgba(0, 229, 255, 0.06),
+        transparent
+      );
+      background-size: 200% 100%;
+      animation: ghShimmer 1.5s linear infinite;
+      border-radius: 4px;
+    }
+    @keyframes ghShimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
 
-/* Cells */
-.gh-cells {
-  display: inline-flex;
-  gap: 3px;
-  padding: 2px;
-  transform-origin: center center;
-  transition: transform 0.4s var(--ease);
-}
-.gh-week {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.gh-cell {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.05);
-  position: relative;
-  cursor: none;
-  opacity: 0;
-  transform: scale(0.4);
-  animation: ghCellIn 0.4s var(--ease) forwards;
-  transition: transform 0.15s var(--ease), z-index 0s;
-}
-@keyframes ghCellIn {
-  to { opacity: 1; transform: scale(1); }
-}
-.gh-cell[data-level="1"] { background: rgba(0, 229, 255, 0.25); }
-.gh-cell[data-level="2"] { background: rgba(0, 229, 255, 0.5); }
-.gh-cell[data-level="3"] {
-  background: var(--sun);
-  box-shadow: 0 0 4px rgba(0, 229, 255, 0.4);
-}
-.gh-cell[data-level="4"] {
-  background: linear-gradient(135deg, var(--sun), var(--dusk));
-  box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
-}
-.gh-cell:hover {
-  transform: scale(1.6);
-  z-index: 5;
-}
+    .gh-cells {
+      display: inline-flex;
+      gap: 3px;
+      padding: 2px;
+      transform-origin: center center;
+      transition: transform 0.4s var(--ease);
+    }
+    .gh-week {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .gh-cell {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.05);
+      position: relative;
+      cursor: none;
+      opacity: 0;
+      transform: scale(0.4);
+      animation: ghCellIn 0.4s var(--ease) forwards;
+      transition: transform 0.15s var(--ease), z-index 0s;
+    }
+    @keyframes ghCellIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+    .gh-cell[data-level="1"] { background: rgba(0, 229, 255, 0.25); }
+    .gh-cell[data-level="2"] { background: rgba(0, 229, 255, 0.5); }
+    .gh-cell[data-level="3"] {
+      background: var(--sun);
+      box-shadow: 0 0 4px rgba(0, 229, 255, 0.4);
+    }
+    .gh-cell[data-level="4"] {
+      background: linear-gradient(135deg, var(--sun), var(--dusk));
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+    }
+    .gh-cell:hover {
+      transform: scale(1.6);
+      z-index: 5;
+    }
 
-/* Tooltip on cell hover */
-.gh-cell::after {
-  content: attr(data-tip);
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  color: var(--text);
-  background: var(--bg3);
-  border: 1px solid var(--border2);
-  padding: 5px 9px;
-  border-radius: 4px;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s, transform 0.15s;
-  z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-.gh-cell:hover::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
+    .gh-cell::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--text);
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      padding: 5px 9px;
+      border-radius: 4px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s, transform 0.15s;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+    .gh-cell:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
 
-/* Error state */
-.gh-error {
-  width: 100%;
-  padding: 2.5rem 2rem;
-  text-align: center;
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.8;
-}
-.gh-error strong { color: var(--sun); }
-.gh-error a {
-  color: var(--sun);
-  text-decoration: none;
-  border-bottom: 1px solid var(--border2);
-  padding-bottom: 1px;
-  transition: border-color 0.2s;
-}
-.gh-error a:hover { border-color: var(--sun); }
+    .gh-error {
+      width: 100%;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .gh-error strong { color: var(--sun); }
+    .gh-error a {
+      color: var(--sun);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border2);
+      padding-bottom: 1px;
+      transition: border-color 0.2s;
+    }
+    .gh-error a:hover { border-color: var(--sun); }
 
-/* ===== MONTH LABELS ===== */
-.gh-months {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.75rem 0.5rem 1.5rem;
-  font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  color: var(--faint);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
+    .gh-months {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0.5rem 1.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: var(--faint);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
 
-/* ===== STATS ===== */
-.gh-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-}
-.gh-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  position: relative;
-}
-.gh-stat:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  right: -0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1px;
-  height: 28px;
-  background: linear-gradient(180deg, transparent, var(--border), transparent);
-}
-.gh-stat-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  color: var(--faint);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.gh-stat-value {
-  font-family: 'Space Mono', monospace;
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
+    .gh-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .gh-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+    }
+    .gh-stat:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: -0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 28px;
+      background: linear-gradient(180deg, transparent, var(--border), transparent);
+    }
+    .gh-stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--faint);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .gh-stat-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 860px) {
-  .gh-card { padding: 1.5rem; }
-  .gh-head { flex-direction: column; align-items: flex-start; }
-  .gh-stats {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-  .gh-stat:nth-child(2)::after { display: none; }
-  .gh-cell { width: 10px; height: 10px; }
-  .gh-corner { width: 14px; height: 14px; }
-  .gh-corner-tl, .gh-corner-bl { left: 10px; }
-  .gh-corner-tl, .gh-corner-tr { top: 10px; }
-  .gh-corner-tr, .gh-corner-br { right: 10px; }
-  .gh-corner-bl, .gh-corner-br { bottom: 10px; }
-}
-@media (max-width: 540px) {
-  .gh-stat-value { font-size: 20px; }
-  .gh-title { font-size: 18px; }
-  .gh-legend { font-size: 9px; }
-  .gh-legend-bar { width: 70px; }
-}
+    @media (max-width: 860px) {
+      .gh-card { padding: 1.5rem; }
+      .gh-head { flex-direction: column; align-items: flex-start; }
+      .gh-stats { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+      .gh-stat:nth-child(2)::after { display: none; }
+      .gh-cell { width: 10px; height: 10px; }
+      .gh-corner { width: 14px; height: 14px; }
+      .gh-corner-tl, .gh-corner-bl { left: 10px; }
+      .gh-corner-tl, .gh-corner-tr { top: 10px; }
+      .gh-corner-tr, .gh-corner-br { right: 10px; }
+      .gh-corner-bl, .gh-corner-br { bottom: 10px; }
+    }
+    @media (max-width: 540px) {
+      .gh-stat-value { font-size: 20px; }
+      .gh-title { font-size: 18px; }
+      .gh-legend { font-size: 9px; }
+      .gh-legend-bar { width: 70px; }
+    }
 
     /* ===========================
        COMMAND PALETTE
@@ -1565,18 +1570,14 @@
       padding: 10px 12px; border-radius: 6px;
       cursor: none; transition: background 0.15s;
     }
-    .cmd-item:hover, .cmd-item.active {
-      background: var(--bg3);
-    }
+    .cmd-item:hover, .cmd-item.active { background: var(--bg3); }
     .cmd-item-icon {
       width: 32px; height: 32px;
       border-radius: 6px; background: rgba(0,240,255,0.1);
       display: flex; align-items: center; justify-content: center;
       font-size: 14px; color: var(--sun);
     }
-    .cmd-item-text {
-      flex: 1; font-size: 14px; color: var(--text);
-    }
+    .cmd-item-text { flex: 1; font-size: 14px; color: var(--text); }
     .cmd-item-hint {
       font-family: 'Space Mono', monospace;
       font-size: 11px; color: var(--faint);
@@ -1608,11 +1609,15 @@
     .reveal-delay-2 { transition-delay: 0.2s; }
     .reveal-delay-3 { transition-delay: 0.3s; }
     .reveal-delay-4 { transition-delay: 0.4s; }
-    .reveal-scale {
-      opacity: 0; transform: scale(0.95);
-      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+
+    /* ===========================
+       FOCUS VISIBLE (accessibility)
+       =========================== */
+    :focus-visible {
+      outline: 2px solid var(--sun);
+      outline-offset: 2px;
+      border-radius: 4px;
     }
-    .reveal-scale.visible { opacity: 1; transform: scale(1); }
 
     /* ===========================
        RESPONSIVE
@@ -1685,6 +1690,7 @@
   <main id="top">
 
     <section id="hero" class="section">
+      <div class="hero-spotlight" id="heroSpotlight"></div>
       <div class="hero-grid">
         <div>
           <div class="hero-status">
@@ -1849,89 +1855,83 @@
           <div class="now-bar"><div class="now-bar-fill" data-pct="68"></div></div>
         </div>
         <div class="now-card reveal reveal-delay-1">
-  <div class="now-head">
-    <div class="now-icon pink">📚</div>
-    <div class="now-label">Learning</div>
-  </div>
-  <div class="now-title">OpenClaw</div>
-  <div class="now-desc">Exploring and studying the implentation of OpenClaw</div>
-  <div class="now-bar"><div class="now-bar-fill" data-pct="35"></div></div>
-</div>
-    
+          <div class="now-head">
+            <div class="now-icon pink">📚</div>
+            <div class="now-label">Learning</div>
+          </div>
+          <div class="now-title">OpenClaw</div>
+          <div class="now-desc">Exploring and studying the implementation of OpenClaw</div>
+          <div class="now-bar"><div class="now-bar-fill" data-pct="35"></div></div>
+        </div>
+      </div>
     </section>
 
     <section id="github" class="section">
-  <div class="section-header">
-    <div>
-      <div class="label reveal">Activity</div>
-      <h2 class="section-title reveal">GitHub <span>Activity</span></h2>
-    </div>
-    <a class="view-all reveal" href="https://github.com/ad-dan" target="_blank" rel="noopener">@ad-dan →</a>
-  </div>
+      <div class="section-header">
+        <div>
+          <div class="label reveal">Activity</div>
+          <h2 class="section-title reveal">GitHub <span>Activity</span></h2>
+        </div>
+        <a class="view-all reveal" href="https://github.com/ad-dan" target="_blank" rel="noopener">@ad-dan →</a>
+      </div>
 
-  <div class="gh-card reveal">
-    <!-- Animated gradient top border -->
-    <div class="gh-border"></div>
+      <div class="gh-card reveal" id="ghCard">
+        <div class="gh-border"></div>
 
-    <!-- HUD corner brackets -->
-    <span class="gh-corner gh-corner-tl"></span>
-    <span class="gh-corner gh-corner-tr"></span>
-    <span class="gh-corner gh-corner-bl"></span>
-    <span class="gh-corner gh-corner-br"></span>
+        <span class="gh-corner gh-corner-tl"></span>
+        <span class="gh-corner gh-corner-tr"></span>
+        <span class="gh-corner gh-corner-bl"></span>
+        <span class="gh-corner gh-corner-br"></span>
 
-    <!-- Header -->
-    <div class="gh-head">
-      <div class="gh-head-left">
-        <span class="gh-live">
-          <span class="gh-live-dot"></span>
-          Live
-        </span>
-        <div class="gh-title">Last year's contributions</div>
-        <div class="gh-handle">github.com/ad-dan</div>
-      </div>
-      <div class="gh-legend">
-        <span>Less</span>
-        <div class="gh-legend-bar"></div>
-        <span>More</span>
-      </div>
-    </div>
+        <div class="gh-head">
+          <div class="gh-head-left">
+            <span class="gh-live">
+              <span class="gh-live-dot"></span>
+              Live
+            </span>
+            <div class="gh-title">Last year's contributions</div>
+            <div class="gh-handle">github.com/ad-dan</div>
+          </div>
+          <div class="gh-legend">
+            <span>Less</span>
+            <div class="gh-legend-bar"></div>
+            <span>More</span>
+          </div>
+        </div>
 
-    <!-- Graph -->
-    <div class="gh-graph">
-      <div class="gh-scan"></div>
-      <div class="gh-cells-wrap" id="ghGraph">
-        <div class="gh-skeleton"></div>
-      </div>
-    </div>
+        <div class="gh-graph">
+          <div class="gh-scan"></div>
+          <div class="gh-cells-wrap" id="ghGraph">
+            <div class="gh-skeleton"></div>
+          </div>
+        </div>
 
-    <!-- Month labels -->
-    <div class="gh-months" aria-hidden="true">
-      <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
-      <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
-      <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
-    </div>
+        <div class="gh-months" aria-hidden="true">
+          <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
+          <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
+          <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+        </div>
 
-    <!-- Stats -->
-    <div class="gh-stats">
-      <div class="gh-stat">
-        <div class="gh-stat-label">Contributions</div>
-        <div class="gh-stat-value" id="ghTotal">—</div>
+        <div class="gh-stats">
+          <div class="gh-stat">
+            <div class="gh-stat-label">Contributions</div>
+            <div class="gh-stat-value" id="ghTotal">—</div>
+          </div>
+          <div class="gh-stat">
+            <div class="gh-stat-label">Active days</div>
+            <div class="gh-stat-value" id="ghActive">—</div>
+          </div>
+          <div class="gh-stat">
+            <div class="gh-stat-label">Current streak</div>
+            <div class="gh-stat-value" id="ghStreak">—</div>
+          </div>
+          <div class="gh-stat">
+            <div class="gh-stat-label">Longest streak</div>
+            <div class="gh-stat-value" id="ghLongest">—</div>
+          </div>
+        </div>
       </div>
-      <div class="gh-stat">
-        <div class="gh-stat-label">Active days</div>
-        <div class="gh-stat-value" id="ghActive">—</div>
-      </div>
-      <div class="gh-stat">
-        <div class="gh-stat-label">Current streak</div>
-        <div class="gh-stat-value" id="ghStreak">—</div>
-      </div>
-      <div class="gh-stat">
-        <div class="gh-stat-label">Longest streak</div>
-        <div class="gh-stat-value" id="ghLongest">—</div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
     <section id="projects" class="section">
       <div class="section-header">
@@ -1947,7 +1947,7 @@
             <div class="proj-number">01 / Agentic AI</div>
             <div class="proj-title">ChainMind</div>
             <div class="proj-image">
-              <img src="./images/proj-1.jpg" alt="ChainMind"/>
+              <img src="./images/proj-1.jpg" alt="ChainMind"  />
               <div class="proj-image-overlay"></div>
             </div>
             <div class="proj-desc">AI-powered autonomous agents that execute complex blockchain operations on Solana and EVM networks through natural language commands.</div>
@@ -1968,7 +1968,7 @@
             <div class="proj-number">02 / Cloud Infra</div>
             <div class="proj-title">Geth Wraith</div>
             <div class="proj-image">
-              <img src="./images/proj-2.jpg" alt="GethWraith"/>
+              <img src="./images/proj-2.jpg" alt="GethWraith"  />
               <div class="proj-image-overlay"></div>
             </div>
             <div class="proj-desc">Real-time dashboard for monitoring and managing EVM blockchain nodes with deep visibility into health, performance, and network connectivity.</div>
@@ -1988,7 +1988,7 @@
             <div class="proj-number">03 / Governance</div>
             <div class="proj-title">Bao Dao</div>
             <div class="proj-image">
-              <img src="./images/proj-3.jpg" alt="DAO"/>
+              <img src="./images/proj-3.jpg" alt="DAO"  />
               <div class="proj-image-overlay"></div>
             </div>
             <div class="proj-desc">Full-stack DAO enabling gasless governance through meta-transactions, allowing members to vote on-chain without transaction fees.</div>
@@ -2008,7 +2008,7 @@
             <div class="proj-number">04 / DeFi</div>
             <div class="proj-title">Vex Dex</div>
             <div class="proj-image">
-              <img src="./images/proj-4.jpg" alt="DEX"/>
+              <img src="./images/proj-4.jpg" alt="DEX"  />
               <div class="proj-image-overlay"></div>
             </div>
             <div class="proj-desc">Decentralized cryptocurrency exchange on Ethereum enabling peer-to-peer trading directly from user wallets without intermediaries.</div>
@@ -2028,7 +2028,7 @@
             <div class="proj-number">05 / Marketplace</div>
             <div class="proj-title">NFT Marketplace</div>
             <div class="proj-image">
-              <img src="./images/proj-5.jpg" alt="NFT"/>
+              <img src="./images/proj-5.jpg" alt="NFT"  />
               <div class="proj-image-overlay"></div>
             </div>
             <div class="proj-desc">A fullstack NFT marketplace on Ethereum enabling users to mint, auction, buy, and sell NFTs with a modern Web3 interface.</div>
@@ -2048,7 +2048,7 @@
             <div class="proj-number">06 / Smart Contracts</div>
             <div class="proj-title">ERC Minter</div>
             <div class="proj-image">
-              <img src="./images/proj-6.jpg" alt="Minter"/>
+              <img src="./images/proj-6.jpg" alt="Minter"  />
               <div class="proj-image-overlay"></div>
             </div>
             <div class="proj-desc">Smart contract system where users spend ERC-20 tokens to mint unique ERC-721 NFTs, creating a token-gated on-chain minting mechanism.</div>
@@ -2253,6 +2253,21 @@
     });
 
     /* ============================================
+       HERO SPOTLIGHT (follows cursor in hero)
+       ============================================ */
+    const heroSpotlight = document.getElementById('heroSpotlight');
+    const heroSection = document.getElementById('hero');
+    if (heroSpotlight && heroSection) {
+      heroSection.addEventListener('mousemove', e => {
+        const rect = heroSection.getBoundingClientRect();
+        const sx = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+        const sy = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+        heroSpotlight.style.setProperty('--sx', sx + '%');
+        heroSpotlight.style.setProperty('--sy', sy + '%');
+      }, { passive: true });
+    }
+
+    /* ============================================
        SCROLL PROGRESS (rAF throttled)
        ============================================ */
     let scrollTicking = false;
@@ -2284,18 +2299,23 @@
 
     /* ============================================
        PARTICLES (rAF + tab-visibility guard)
+       Optimized: 50 particles (was 70), 100px dist (was 120)
        ============================================ */
     const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
+    const pctx = canvas.getContext('2d');
     let W, H;
     const COLS = ['#00F0FF', '#FF2E88', '#D946EF', '#F8F32B', '#FF6AC1'];
     const pts = [];
 
+    let resizeTimer;
     function resize() {
       W = canvas.width = window.innerWidth;
       H = canvas.height = window.innerHeight;
     }
-    window.addEventListener('resize', resize, { passive: true });
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    }, { passive: true });
     resize();
 
     function P() {
@@ -2307,38 +2327,44 @@
       this.o = Math.random() * 0.5 + 0.1;
       this.c = COLS[Math.floor(Math.random() * COLS.length)];
     }
-    for (let i = 0; i < 70; i++) pts.push(new P());
+    for (let i = 0; i < 50; i++) pts.push(new P());
 
+    const CONNECT_DIST = 100;
     function drawParticles() {
       if (!document.hidden) {
-        ctx.clearRect(0, 0, W, H);
+        pctx.clearRect(0, 0, W, H);
+        // Draw connections
         for (let i = 0; i < pts.length; i++) {
+          const pi = pts[i];
           for (let j = i + 1; j < pts.length; j++) {
-            const dx = pts[i].x - pts[j].x;
-            const dy = pts[i].y - pts[j].y;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-            if (dist < 120) {
-              ctx.beginPath();
-              ctx.moveTo(pts[i].x, pts[i].y);
-              ctx.lineTo(pts[j].x, pts[j].y);
-              ctx.strokeStyle = pts[i].c;
-              ctx.globalAlpha = (1 - dist/120) * 0.1;
-              ctx.lineWidth = 0.5;
-              ctx.stroke();
+            const pj = pts[j];
+            const dx = pi.x - pj.x;
+            const dy = pi.y - pj.y;
+            const distSq = dx*dx + dy*dy;
+            if (distSq < CONNECT_DIST * CONNECT_DIST) {
+              const dist = Math.sqrt(distSq);
+              pctx.beginPath();
+              pctx.moveTo(pi.x, pi.y);
+              pctx.lineTo(pj.x, pj.y);
+              pctx.strokeStyle = pi.c;
+              pctx.globalAlpha = (1 - dist/CONNECT_DIST) * 0.1;
+              pctx.lineWidth = 0.5;
+              pctx.stroke();
             }
           }
         }
+        // Draw points + update positions
         pts.forEach(p => {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
-          ctx.fillStyle = p.c;
-          ctx.globalAlpha = p.o;
-          ctx.fill();
+          pctx.beginPath();
+          pctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+          pctx.fillStyle = p.c;
+          pctx.globalAlpha = p.o;
+          pctx.fill();
           p.x += p.vx; p.y += p.vy;
           if (p.x < 0 || p.x > W) p.vx *= -1;
           if (p.y < 0 || p.y > H) p.vy *= -1;
         });
-        ctx.globalAlpha = 1;
+        pctx.globalAlpha = 1;
       }
       requestAnimationFrame(drawParticles);
     }
@@ -2466,13 +2492,13 @@
     }
 
     const phrases = [
-      'intelligent Web3 systems',
-      'autonomous AI agents',
-      'scalable cloud infra',
-      'gasless governance flows',
-      'token-gated experiences',
-      'on-chain coordination'
-    ];
+  'autonomous onchain AI agents',
+  'cross-chain smart contract systems',
+  'multi-chain node orchestration',
+  'intent-based DeFi protocols',
+  'AI-powered Web3 systems',
+  'scalable decentralized infrastructure',
+];
     const scrambleEl = document.getElementById('scrambleText');
     if (scrambleEl) {
       const fx = new TextScramble(scrambleEl);
@@ -2483,7 +2509,6 @@
         });
         counter = (counter + 1) % phrases.length;
       };
-      // Delay the first scramble so it doesn't fight the initial paint
       setTimeout(next, 800);
     }
 
@@ -2526,7 +2551,7 @@
       { icon: '👤', text: 'Go to About', action: () => scrollTo('#about') },
       { icon: '⚡', text: 'Go to Now', action: () => scrollTo('#now') },
       { icon: '🛠', text: 'Go to Projects', action: () => scrollTo('#projects') },
-      { icon: '🌐', text: 'Go to Social', action: () => scrollTo('#social') },
+            { icon: '🌐', text: 'Go to Social', action: () => scrollTo('#social') },
       { icon: '✉', text: 'Go to Contact', action: () => scrollTo('#contact') },
       { icon: '🐙', text: 'Open GitHub', action: () => window.open('https://github.com/ad-dan', '_blank') },
       { icon: '💼', text: 'Open LinkedIn', action: () => window.open('https://www.linkedin.com/in/aditya-danapurkar-596102149/', '_blank') },
@@ -2621,181 +2646,165 @@
       }
     });
 
-    /* ============================================
-   GITHUB CONTRIBUTION GRAPH (client-rendered)
-   ============================================ */
-const GH_USER = 'ad-dan';
-const GH_API  = `https://github-contributions-api.jogruber.de/v4/${GH_USER}?y=last`;
+    const GH_USER = 'ad-dan';
+    const GH_API  = `https://github-contributions-api.jogruber.de/v4/${GH_USER}?y=last`;
 
-/* ----- Helpers ----- */
-const getCount = d => d.contributionCount ?? d.count ?? 0;
+    const getCount = d => d.contributionCount ?? d.count ?? 0;
 
-function getLevel(count) {
-  if (!count) return 0;
-  if (count <= 2) return 1;
-  if (count <= 5) return 2;
-  if (count <= 9) return 3;
-  return 4;
-}
-
-function fmtDate(d) {
-  return new Date(d).toLocaleDateString('en-US', {
-    month: 'short', day: 'numeric', year: 'numeric'
-  });
-}
-
-function formatNumber(n) {
-  if (n >= 10000) return (n / 1000).toFixed(1) + 'K+';
-  if (n >= 1000)  return (n / 1000).toFixed(1) + 'K+';
-  return Math.floor(n).toLocaleString();
-}
-
-/* ============================================
-   RESPONSIVE GRAPH FIT
-   Scales entire graph to container width
-   ============================================ */
-function fitGraphToContainer() {
-  const wrap  = document.querySelector('.gh-cells-wrap');
-  const cells = document.querySelector('.gh-cells');
-  if (!wrap || !cells) return;
-
-  // Reset to natural size to measure correctly
-  cells.style.transform = 'none';
-
-  // Wait one frame so layout settles
-  requestAnimationFrame(() => {
-    const wrapWidth   = wrap.clientWidth;
-    const cellsWidth  = cells.scrollWidth;
-    const cellsHeight = cells.scrollHeight;
-
-    if (cellsWidth <= 0 || wrapWidth <= 0) return;
-
-    // Always scale to fit container width (both smaller AND larger)
-    const scale = wrapWidth / cellsWidth;
-    cells.style.transform = `scale(${scale})`;
-
-    // Make wrap tall enough to hold the scaled graph
-    wrap.style.height = (cellsHeight * scale) + 'px';
-  });
-}
-// Debounced resize handler
-let fitTimer;
-window.addEventListener('resize', () => {
-  clearTimeout(fitTimer);
-  fitTimer = setTimeout(fitGraphToContainer, 100);
-});
-
-/* ----- Graph Builder ----- */
-function buildGraph(contributions) {
-  // Bucket into weeks (Sun-start like GitHub)
-  const weeks = [];
-  let week = new Array(7).fill(null);
-  let started = false;
-
-  contributions.forEach(day => {
-    const dow = new Date(day.date).getDay();
-    if (dow === 0 && started) {
-      weeks.push(week);
-      week = new Array(7).fill(null);
+    function getLevel(count) {
+      if (!count) return 0;
+      if (count <= 2) return 1;
+      if (count <= 5) return 2;
+      if (count <= 9) return 3;
+      return 4;
     }
-    week[dow] = day;
-    started = true;
-  });
-  if (week.some(d => d)) weeks.push(week);
 
-  // Render with cascading reveal
-  let i = 0;
-  return weeks.map(w => `
-    <div class="gh-week">
-      ${w.map(d => {
-        if (!d) return '<div class="gh-cell" style="visibility:hidden"></div>';
-        const count = getCount(d);
-        const level = getLevel(count);
-        const tip = count === 0
-          ? `No contributions · ${fmtDate(d.date)}`
-          : `${count} contribution${count > 1 ? 's' : ''} · ${fmtDate(d.date)}`;
-        // Cap delay so the full reveal finishes in ~700ms
-        const delay = Math.min(i++ * 1.8, 700);
-        return `<div class="gh-cell" data-level="${level}" data-tip="${tip}" style="animation-delay:${delay}ms"></div>`;
-      }).join('')}
-    </div>
-  `).join('');
-}
+    function fmtDate(d) {
+      return new Date(d).toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric'
+      });
+    }
 
-/* ----- Stats ----- */
-function computeStats(contributions) {
-  const total = contributions.reduce((s, d) => s + getCount(d), 0);
-  const activeDays = contributions.filter(d => getCount(d) > 0).length;
+    function formatNumber(n) {
+      if (n >= 10000) return (n / 1000).toFixed(1) + 'K+';
+      if (n >= 1000)  return (n / 1000).toFixed(1) + 'K+';
+      return Math.floor(n).toLocaleString();
+    }
 
-  let currentStreak = 0;
-  for (let i = contributions.length - 1; i >= 0; i--) {
-    if (getCount(contributions[i]) > 0) currentStreak++;
-    else break;
-  }
+    /* ----- Responsive Graph Fit ----- */
+    function fitGraphToContainer() {
+      const wrap  = document.querySelector('.gh-cells-wrap');
+      const cells = document.querySelector('.gh-cells');
+      if (!wrap || !cells) return;
 
-  let longestStreak = 0, run = 0;
-  contributions.forEach(d => {
-    if (getCount(d) > 0) { run++; longestStreak = Math.max(longestStreak, run); }
-    else run = 0;
-  });
+      cells.style.transform = 'none';
 
-  return { total, activeDays, currentStreak, longestStreak };
-}
+      requestAnimationFrame(() => {
+        const wrapWidth   = wrap.clientWidth;
+        const cellsWidth  = cells.scrollWidth;
+        const cellsHeight = cells.scrollHeight;
 
-/* ----- Animated Number ----- */
-function animateStat(id, target, formatter) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const duration = 1400;
-  const start = performance.now();
-  (function step(now) {
-    const p = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - p, 3);
-    el.textContent = formatter(target * eased);
-    if (p < 1) requestAnimationFrame(step);
-  })(start);
-}
+        if (cellsWidth <= 0 || wrapWidth <= 0) return;
 
-/* ----- Main Loader ----- */
-async function loadGitHubGraph() {
-  const wrap = document.getElementById('ghGraph');
-  if (!wrap) return;
+        const scale = wrapWidth / cellsWidth;
+        cells.style.transform = `scale(${scale})`;
 
-  try {
-    const res = await fetch(GH_API);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    const contributions = data.contributions || [];
-    if (!contributions.length) throw new Error('No data returned');
+        wrap.style.height = (cellsHeight * scale) + 'px';
+      });
+    }
 
-    // Render cells
-    wrap.innerHTML = `<div class="gh-cells">${buildGraph(contributions)}</div>`;
-    fitGraphToContainer();   
+    let fitTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(fitTimer);
+      fitTimer = setTimeout(fitGraphToContainer, 100);
+    });
 
-    // Animate stats
-    const stats = computeStats(contributions);
-    animateStat('ghTotal',   stats.total,        formatNumber);
-    animateStat('ghActive',  stats.activeDays,   v => Math.floor(v).toLocaleString());
-    animateStat('ghStreak',  stats.currentStreak, v => Math.floor(v) + 'd');
-    animateStat('ghLongest', stats.longestStreak, v => Math.floor(v) + 'd');
+    /* ----- Graph Builder ----- */
+    function buildGraph(contributions) {
+      const weeks = [];
+      let week = new Array(7).fill(null);
+      let started = false;
 
-  } catch (err) {
-    console.warn('GitHub graph failed:', err);
-    wrap.innerHTML = `
-      <div class="gh-error">
-        Couldn't load activity data right now.<br><br>
-        <strong>${err.message}</strong><br><br>
-        <a href="https://github.com/${GH_USER}" target="_blank" rel="noopener">
-          View profile on GitHub →
-        </a>
-      </div>
-    `;
-  }
-}
+      contributions.forEach(day => {
+        const dow = new Date(day.date).getDay();
+        if (dow === 0 && started) {
+          weeks.push(week);
+          week = new Array(7).fill(null);
+        }
+        week[dow] = day;
+        started = true;
+      });
+      if (week.some(d => d)) weeks.push(week);
 
-loadGitHubGraph();
+      let i = 0;
+      return weeks.map(w => `
+        <div class="gh-week">
+          ${w.map(d => {
+            if (!d) return '<div class="gh-cell" style="visibility:hidden"></div>';
+            const count = getCount(d);
+            const level = getLevel(count);
+            const tip = count === 0
+              ? `No contributions · ${fmtDate(d.date)}`
+              : `${count} contribution${count > 1 ? 's' : ''} · ${fmtDate(d.date)}`;
+            const delay = Math.min(i++ * 1.8, 700);
+            return `<div class="gh-cell" data-level="${level}" data-tip="${tip}" style="animation-delay:${delay}ms"></div>`;
+          }).join('')}
+        </div>
+      `).join('');
+    }
 
-/* ----- Lazy Load (only when section is in view) ----- */
+    /* ----- Stats ----- */
+    function computeStats(contributions) {
+      const total = contributions.reduce((s, d) => s + getCount(d), 0);
+      const activeDays = contributions.filter(d => getCount(d) > 0).length;
+
+      let currentStreak = 0;
+      for (let i = contributions.length - 1; i >= 0; i--) {
+        if (getCount(contributions[i]) > 0) currentStreak++;
+        else break;
+      }
+
+      let longestStreak = 0, run = 0;
+      contributions.forEach(d => {
+        if (getCount(d) > 0) { run++; longestStreak = Math.max(longestStreak, run); }
+        else run = 0;
+      });
+
+      return { total, activeDays, currentStreak, longestStreak };
+    }
+
+    /* ----- Animated Number ----- */
+    function animateStat(id, target, formatter) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const duration = 1400;
+      const start = performance.now();
+      (function step(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = formatter(target * eased);
+        if (p < 1) requestAnimationFrame(step);
+      })(start);
+    }
+
+    /* ----- Main Loader (now lazy via IntersectionObserver) ----- */
+    let ghLoaded = false;
+    async function loadGitHubGraph() {
+      const wrap = document.getElementById('ghGraph');
+      if (!wrap || ghLoaded) return;
+      ghLoaded = true;
+
+      try {
+        const res = await fetch(GH_API);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const contributions = data.contributions || [];
+        if (!contributions.length) throw new Error('No data returned');
+
+        wrap.innerHTML = `<div class="gh-cells">${buildGraph(contributions)}</div>`;
+        fitGraphToContainer();
+
+        const stats = computeStats(contributions);
+        animateStat('ghTotal',   stats.total,          formatNumber);
+        animateStat('ghActive',  stats.activeDays,     v => Math.floor(v).toLocaleString());
+        animateStat('ghStreak',  stats.currentStreak,  v => Math.floor(v) + 'd');
+        animateStat('ghLongest', stats.longestStreak,  v => Math.floor(v) + 'd');
+
+      } catch (err) {
+        console.warn('GitHub graph failed:', err);
+        wrap.innerHTML = `
+          <div class="gh-error">
+            Couldn't load activity data right now.<br><br>
+            <strong>${err.message}</strong><br><br>
+            <a href="https://github.com/${GH_USER}" target="_blank" rel="noopener">
+              View profile on GitHub →
+            </a>
+          </div>
+        `;
+      }
+    } 
+
+    loadGitHubGraph();
 
     /* ============================================
        MOBILE MENU
