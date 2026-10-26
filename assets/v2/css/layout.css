@@ -1,0 +1,817 @@
+/* ============================================================================
+   layout.css — page grid, bands, masthead, section shells, footer
+   assets/v2
+
+   THE BAND IS THE UNIT OF COLOUR
+   Every section is a `.band`: a full-bleed element that owns its ground and
+   carries its content in an inner `.page.shell`. The separation is what makes
+   the colour system possible — a full-width ground can only exist on an element
+   whose width is not constrained, and a max-width content column needs an
+   element of its own.
+
+   Without this, `.compartment.page.shell` would colour only the middle 88rem
+   and leave cream gutters either side, which is an accent on a page, not a
+   colour system.
+
+   THE GRID IS THE ART DIRECTION
+   Twelve columns, tight outer margins, and a fixed left margin-note column that
+   carries the section numeral and label like a spec sheet. Column rules stay
+   visible at all but the narrowest widths: the grid is not scaffolding to hide.
+
+   BIMODAL DENSITY IS THE RHYTHM
+   Neighbouring sections differ violently in density — a void framing one
+   oversized string, then a wall of packed metadata.
+   ========================================================================= */
+
+/* ---------------------------------------------------------------------------
+   PAGE GRID
+   ------------------------------------------------------------------------ */
+
+.page {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--s3);
+}
+
+/* Column roles are set explicitly where they are needed — the hero body uses
+   `3 / 8` and `8 / 13`, the in-flight split `1 / 9` and `9 / 13`. Naming them
+   here as `.col-note` / `.col-main` / `.col-full` was a convention the markup
+   never adopted, so the three rules were dead weight that implied a system
+   that did not exist. */
+
+/* Grid and flex children default to `min-width: auto`, which refuses to shrink
+   below their content's min-content width. One long unbreakable string — an
+   email address, a URL, a tag row — then widens the track past the viewport
+   and gets clipped, which shows up as a silent cut rather than a scrollbar.
+   min-width: 0 lets them shrink, which is what lets `overflow-wrap` inside
+   them do its job.
+
+ */
+.shell > *,
+.split > *,
+.stack > *,
+.chips > * {
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   THE BAND — full-bleed ground + clipped inner content
+   ------------------------------------------------------------------------ */
+
+.band {
+  position: relative;
+  background: transparent;
+  overflow: clip;
+}
+
+.band + .band {
+  border-block-start: var(--bw-mid) solid var(--border);
+}
+
+.band > .page {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   MASTHEAD — Cyber-Brutalist Fixed Header
+   ------------------------------------------------------------------------ */
+
+.mastbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background-color: rgba(8, 8, 8, 0.94);
+  backdrop-filter: blur(8px);
+  border-block-end: var(--bw) solid var(--border);
+}
+
+.mast {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--s3);
+  padding-block: var(--s2);
+}
+
+.mast__mark {
+  font-family: var(--font-display);
+  font-size: var(--fs-body);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: 44px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--fg);
+}
+
+.mast > * {
+  min-width: 0;
+}
+
+.mast__mark span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.mast__nav {
+  display: flex;
+  justify-content: center;
+  gap: var(--s3);
+}
+
+.mast__nav a {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: var(--bw) solid transparent;
+  padding-bottom: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding-inline: var(--s2);
+  transition: color var(--step) steps(2, end), border-color var(--step) steps(2, end);
+}
+
+.mast__nav a:hover,
+.mast__nav a[aria-current='true'] {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.mast__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+
+/* ---------------------------------------------------------------------------
+   HERO — Dark Cyber-Brutalist Command Station & WebGL Canvas
+   ------------------------------------------------------------------------ */
+
+#index {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 85dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: var(--s4);
+  padding-block: var(--s5) var(--s4);
+}
+
+.hero__body {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--s4);
+  row-gap: var(--s4);
+  align-items: stretch;
+}
+
+.hero__lead {
+  grid-column: 1 / 8;
+  display: grid;
+  gap: var(--s3);
+  align-content: start;
+  min-width: 0;
+}
+
+.hero__visual {
+  grid-column: 8 / 13;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+@media (max-width: 991px) {
+  .hero__lead {
+    grid-column: 1 / -1;
+  }
+  .hero__visual {
+    grid-column: 1 / -1;
+    margin-block-start: var(--s2);
+  }
+}
+
+/* Hand-Drawn Rough.js Framed Artifact */
+.hero-art-frame {
+  position: relative;
+  background: var(--surface-well);
+  border: none;
+  box-shadow: 4px 4px 0 0 #000;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 260px;
+  overflow: visible;
+  transition: box-shadow var(--step) ease;
+}
+
+.hero-art-frame:hover {
+  box-shadow: 6px 6px 0 0 rgba(255, 43, 0, 0.4);
+}
+
+.rough-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  overflow: visible;
+  filter: drop-shadow(0 0 8px rgba(255, 43, 0, 0.28));
+}
+
+.hero-art-frame__viewport {
+  position: relative;
+  flex: 1 1 auto;
+  height: calc(100% - 20px);
+  min-height: 240px;
+  background: #050505;
+  overflow: hidden;
+  margin: 10px;
+}
+
+.hero-art-frame__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: crosshair;
+}
+
+.hero__lead > * {
+  margin: 0;
+}
+
+.hero__title {
+  font-size: var(--fs-display);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  margin-block: var(--s1);
+}
+
+.hero__title span {
+  display: block;
+}
+
+.hero__role {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hero__lede {
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--fg);
+  max-width: 44rem;
+}
+
+.hero__acts {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  flex-wrap: wrap;
+  margin-block-start: var(--s2);
+}
+
+.hero__status {
+  margin-block-start: 0;
+}
+
+.hero__status span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: 6px 14px;
+  background: #000000;
+  border: 1.5px solid var(--accent);
+  box-shadow: 3px 3px 0 0 var(--violet);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.85); }
+}
+
+/* ---------------------------------------------------------------------------
+   SECTION INDEX (TOC) — Cyber Quick Jump
+   ------------------------------------------------------------------------ */
+
+.toc {
+  margin-block-start: var(--s3);
+}
+
+.toc ol {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--bw);
+  background: var(--border);
+  border: var(--bw) solid var(--border);
+}
+
+.toc li {
+  background: var(--surface);
+}
+
+.toc a {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: var(--s2);
+  padding: var(--s2) var(--s3);
+  min-height: 44px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  color: var(--muted);
+  text-decoration: none;
+  transition: background-color var(--step) steps(2, end), color var(--step) steps(2, end);
+}
+
+.toc a:hover {
+  background: var(--surface-2);
+  color: var(--accent);
+}
+
+.toc a b {
+  color: var(--violet);
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------------------
+   COMPARTMENT — the inner grid of a band
+   ------------------------------------------------------------------------ */
+
+.compartment {
+  padding-block: var(--s6);
+  scroll-margin-top: 5rem;
+}
+
+.compartment > * {
+  grid-column: 1 / -1;
+  position: relative;
+  z-index: 1;
+}
+
+.compartment__head {
+  display: grid;
+  gap: var(--s1);
+  align-items: start;
+  margin-block-end: var(--s5);
+}
+
+.compartment__num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.compartment__num::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 0;
+  background: var(--accent);
+  box-shadow: 2px 2px 0 0 var(--accent-pair, var(--violet));
+}
+
+.compartment__title {
+  justify-self: start;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--fg-bright);
+  border: none;
+  box-shadow: none;
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.compartment__aside {
+  font-size: var(--fs-meta);
+  color: var(--muted);
+  margin-block-start: var(--s1);
+}
+
+/* ---------------------------------------------------------------------------
+   INSIDE A COMPARTMENT
+   ------------------------------------------------------------------------ */
+
+.stack {
+  display: grid;
+  gap: var(--s5);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s6);
+  align-items: start;
+}
+
+.prose {
+  display: grid;
+  gap: var(--s3);
+  max-width: var(--measure-text);
+}
+
+.prose p {
+  color: var(--fg);
+  line-height: 1.6;
+}
+
+/* ---------------------------------------------------------------------------
+   METRICS BENTO — Dark Futuristic Telemetry
+   ------------------------------------------------------------------------ */
+
+.metrics {
+  display: grid;
+  grid-template-columns: 1.25fr 2fr;
+  gap: var(--s4);
+  align-items: stretch;
+}
+
+.metric {
+  background: var(--surface);
+  border: var(--bw-mid) solid var(--border);
+  box-shadow: 4px 4px 0 0 #000000;
+  padding: var(--s4) var(--s5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  transition: translate var(--step) steps(2, end), box-shadow var(--step) steps(2, end), border-color var(--step) steps(2, end);
+}
+
+.metric:hover {
+  translate: -3px -3px;
+  box-shadow: 6px 6px 0 0 var(--violet);
+  border-color: var(--accent);
+}
+
+.metric--lead {
+  border-color: var(--accent);
+  box-shadow: 4px 4px 0 0 var(--violet);
+}
+
+.metric--lead:hover {
+  box-shadow: 6px 6px 0 0 var(--accent);
+  border-color: var(--violet);
+}
+
+.metrics__stack {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s3);
+}
+
+.metric__v {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: -0.03em;
+  margin-block-end: var(--s2);
+}
+
+.metric--lead .metric__v {
+  font-size: clamp(3rem, 5.5vw, 5rem);
+  color: var(--accent);
+}
+
+.metric__k {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hero__kicker {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-block-end: var(--s1);
+}
+
+/* ---------------------------------------------------------------------------
+   WORK — Full-Width Single-Row Engineering Dossiers
+   ------------------------------------------------------------------------ */
+
+.work {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s4);
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------------------
+   RENDERING CONTAINMENT — Defer layout & paint for heavy off-screen sections
+   ------------------------------------------------------------------------ */
+
+#activity {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 340px;
+}
+
+#contact {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 550px;
+}
+
+footer.band {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
+}
+
+/* ---------------------------------------------------------------------------
+   READING PROGRESS
+   ------------------------------------------------------------------------ */
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: calc(var(--z-sticky) + 1);
+  pointer-events: none;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  inline-size: 0;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* ---------------------------------------------------------------------------
+   FOOTER — Cyber-Brutalist System Termination
+   ------------------------------------------------------------------------ */
+
+.foot {
+  padding-block: var(--s5) var(--s4);
+}
+
+.foot__name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-h2);
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  margin-block-end: var(--s4);
+  color: var(--fg-bright);
+}
+
+.foot__cols {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s5);
+  padding-block-start: var(--s3);
+  border-block-start: var(--bw) solid var(--border);
+}
+
+.footlink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.footlink:hover {
+  color: var(--violet);
+}
+
+.foot__burst {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin-block-end: var(--s4);
+}
+
+.barcode {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 20px;
+}
+
+.barcode i {
+  display: block;
+  width: 2px;
+  background: var(--accent);
+}
+
+/* ---------------------------------------------------------------------------
+   MOBILE INDEX OVERLAY
+   Chrome, so it keeps the cream ground rather than the ground of whichever
+   section it was opened over.
+   ------------------------------------------------------------------------ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: none;
+  flex-direction: column;
+  background-color: rgba(9, 11, 16, 0.98);
+  backdrop-filter: blur(12px);
+  border-block-start: var(--bw-head) solid var(--border);
+  padding: var(--s3) var(--pad) var(--s6);
+  overflow-y: auto;
+}
+
+.overlay[data-open='true'] {
+  display: flex;
+}
+
+.overlay ol {
+  list-style: none;
+  display: grid;
+  gap: var(--bw);
+  background: var(--border);
+  border: var(--bw) solid var(--border);
+  margin-block-start: var(--s4);
+}
+
+.overlay a {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s3);
+  min-height: 56px;
+  padding: var(--s3);
+  background: var(--surface);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  text-decoration: none;
+  transition: background-color var(--step) steps(2, end), color var(--step) steps(2, end);
+}
+
+.overlay a:hover {
+  background: var(--surface-2);
+  color: var(--accent);
+}
+
+.overlay a b {
+  margin-inline-start: auto;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.menu-toggle {
+  display: none;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: var(--bw-mid) solid var(--border);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: border-color var(--step) steps(2, end), color var(--step) steps(2, end);
+}
+
+.menu-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ---------------------------------------------------------------------------
+   RESPONSIVE
+   Below 900px the work grid drops to 2-up; below 768px every asymmetric
+   composition collapses to a single full-width column and the type scale
+   settles, rather than shrinking.
+   ------------------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: 1fr;
+    gap: var(--s4);
+  }
+
+  .foot__cols {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --pad: 1rem;
+    --fs-display: clamp(2.1rem, 10.8vw, 3.8rem);
+  }
+
+  .mast__mark {
+    font-size: clamp(0.82rem, 3.8vw, 1rem);
+  }
+
+  /* The grid itself collapses: one column, no orphaned columns. */
+  .shell {
+    grid-template-columns: 1fr;
+    row-gap: var(--s4);
+  }
+
+  .hero__body {
+    grid-template-columns: 1fr;
+    row-gap: var(--s4);
+  }
+
+  .hero__lead {
+    grid-column: 1;
+  }
+
+  /* The breach is a desktop device. On a phone the name simply leads, with
+     the rest of the content below it. */
+  .hero {
+    min-height: 0;
+    padding-block: var(--s6) var(--s5);
+  }
+
+  .work {
+    grid-template-columns: 1fr;
+  }
+
+  .foot__cols {
+    grid-template-columns: 1fr;
+    gap: var(--s4);
+  }
+
+  .mast__nav {
+    display: none;
+  }
+
+  /* With the nav hidden, three columns no longer resolve to three items, and
+     auto-placement leaves the tools hanging past the padding at ~320px. Two
+     explicit columns is deterministic: the mark takes what is left and
+     truncates, the tools keep their intrinsic width. */
+  .mast {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+}

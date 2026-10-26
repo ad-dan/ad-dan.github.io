@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Aditya Danapurkar">
+  <!-- Hand-authored vector, not generated. A raster favicon is either blurry at
+       16px or oversized, and it cannot adapt to the theme. This is two shapes
+       and stays crisp at every size the browser will ask for.
+
+       It replaces a dark CRT with green scanlines that belonged to the old
+       phosphor build and had nothing to do with this one.
+
+       A single "A", not "AD": the browser asks for this at 16px, where two
+       letters land at roughly 6px each and turn to mush. One letter is the
+       most this grid can carry honestly. -->
+  <rect width="32" height="32" fill="#000000"/>
+  <!-- The A, with its counter cut by evenodd so there is no inner path. -->
+  <path fill="#ff2b00" fill-rule="evenodd"
+        d="M3.5 27.5 L13.8 4.5 L18.2 4.5 L28.5 27.5 L22.2 27.5 L20.3 22.7 L11.7 22.7 L9.8 27.5 Z
+           M16 12.4 L13.2 19.2 L18.8 19.2 Z"/>
+</svg>

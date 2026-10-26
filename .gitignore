@@ -1,3 +1,4 @@
-test.html
-resize.py
+node_modules/
 .DS_Store
+*.log
+screenshot-*.png

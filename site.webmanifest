@@ -1,1 +1,18 @@
-{"name":"Aditya Danapurkar - Website","short_name":"Aditya Danapurkar - Website","icons":[{"src":"/android-chrome-192x192.png","sizes":"192x192","type":"image/png"},{"src":"/android-chrome-512x512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#ffffff","background_color":"#ffffff","display":"standalone"}
+{
+  "name": "Aditya Danapurkar — Web Developer & Software Engineer",
+  "short_name": "adityadanapurkar",
+  "description": "Full-stack web developer building modern applications, interactive interfaces, and robust backend systems with TypeScript, React, Next.js, Node.js, Solidity, and Python.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#090B10",
+  "theme_color": "#090B10",
+  "categories": ["portfolio", "developer"],
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

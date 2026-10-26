@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 · Route Disconnected — Aditya Danapurkar</title>
+    <meta name="description" content="404 Page Not Found — The requested coordinate does not exist in this sector." />
+    <meta name="robots" content="noindex, follow" />
+    <meta name="theme-color" content="#080808" />
+    <meta name="color-scheme" content="dark" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Self-hosted font preloads -->
+    <link
+      rel="preload"
+      href="/fonts/archivo-black-v1-latin-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/instrument-sans-v1-latin-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!-- Render-blocking stylesheet -->
+    <link rel="stylesheet" href="/assets/v2/css/bundle.min.css" />
+
+    <style>
+      .error-stage {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        align-items: center;
+        padding-block: var(--s8) var(--s7);
+      }
+      .error-card {
+        background: var(--surface);
+        border: var(--bw) solid var(--rule);
+        padding: clamp(var(--s4), 5vw, var(--s7));
+        box-shadow: var(--shadow-lg);
+        position: relative;
+      }
+      .error-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--accent);
+      }
+      .error-num {
+        font-family: var(--font-display);
+        font-size: clamp(5.5rem, 18vw, 11rem);
+        line-height: 0.85;
+        letter-spacing: -0.04em;
+        color: var(--fg-bright);
+        margin: var(--s2) 0 var(--s4) 0;
+      }
+      .error-num span {
+        color: var(--accent);
+      }
+      .diag-table {
+        margin: var(--s5) 0;
+        background: var(--surface-well);
+        border: var(--bw) solid var(--rule);
+        padding: var(--s4);
+        font-family: var(--font-mono);
+        font-size: var(--fs-xs);
+        display: grid;
+        gap: var(--s2);
+      }
+      .diag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--s2) var(--s4);
+      }
+      .diag-label {
+        color: var(--muted);
+        min-width: 9rem;
+        letter-spacing: 0.05em;
+      }
+      .diag-val {
+        color: var(--fg);
+        word-break: break-all;
+      }
+      .diag-val.accent {
+        color: var(--accent);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <!-- Masthead -->
+    <div class="mastbar">
+      <header class="mast page">
+        <a class="mast__mark" href="/" aria-label="Aditya Danapurkar homepage">
+          <span class="status-dot" style="background: var(--rust); box-shadow: 0 0 10px var(--rust)" aria-hidden="true"></span>
+          adityadanapurkar<span>.com</span>
+        </a>
+
+        <nav class="mast__nav" aria-label="Primary">
+          <a href="/">Home</a>
+          <a href="/#profile">Profile</a>
+          <a href="/#work">Work</a>
+          <a href="/#activity">Activity</a>
+          <a href="/#contact">Contact</a>
+        </nav>
+
+        <div class="mast__tools">
+          <button
+            class="menu-toggle"
+            type="button"
+            id="menu-toggle"
+            aria-expanded="false"
+            aria-controls="overlay"
+            aria-label="Toggle navigation menu">
+            <span aria-hidden="true">///</span>
+          </button>
+        </div>
+      </header>
+    </div>
+
+    <!-- Mobile index overlay -->
+    <nav class="overlay" id="overlay" data-open="false" aria-label="Section index">
+      <ol>
+        <li><a href="/">Home <b>00</b></a></li>
+        <li><a href="/#profile">Profile <b>01</b></a></li>
+        <li><a href="/#metrics">Metrics <b>02</b></a></li>
+        <li><a href="/#work">Work <b>03</b></a></li>
+        <li><a href="/#activity">Activity <b>04</b></a></li>
+        <li><a href="/#contact">Contact <b>05</b></a></li>
+      </ol>
+    </nav>
+
+    <!-- Main 404 Stage -->
+    <main id="main">
+      <section class="band accent-red error-stage">
+        <div class="page shell" style="max-width: 58rem; margin-inline: auto;">
+          <div class="error-card">
+            <!-- Header Telemetry Bar -->
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--s2); border-bottom: var(--bw) solid var(--rule); padding-block-end: var(--s3);">
+              <span class="stamp stamp--lime">ERR // 404_NOT_FOUND</span>
+              <span style="font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em;">FAULT_CODE: 0x404_ROUTE_DESYNC</span>
+            </div>
+
+            <!-- Big Error Number -->
+            <h1 class="error-num">404<span>.</span></h1>
+
+            <!-- Explanatory Subtitle & Description -->
+            <p style="font-family: var(--font-mono); font-size: var(--fs-meta); color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 var(--s2) 0;">
+              [ SIGNAL LOST // SECTOR UNREACHABLE ]
+            </p>
+            <p style="font-size: clamp(1.05rem, 2vw, 1.25rem); color: var(--fg); line-height: 1.5; max-width: 44ch; margin: 0;">
+              The requested coordinate could not be resolved on this system. The link may have changed, been relocated, or never existed in this sector.
+            </p>
+
+            <!-- Technical Diagnostic Readout -->
+            <div class="diag-table" role="region" aria-label="System diagnostic telemetry">
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--rule); padding-bottom: var(--s2); margin-bottom: var(--s2); color: var(--muted);">
+                <span>TELEMETRY_DIAGNOSTIC_TRACE</span>
+                <span>STATUS: DISCONNECTED</span>
+              </div>
+              <div class="diag-row">
+                <span class="diag-label">REQUEST_PATH</span>
+                <span class="diag-val" id="trace-path">/unknown-route</span>
+              </div>
+              <div class="diag-row">
+                <span class="diag-label">HOST_NODE</span>
+                <span class="diag-val">adityadanapurkar.com (Edge)</span>
+              </div>
+              <div class="diag-row">
+                <span class="diag-label">DIAGNOSIS</span>
+                <span class="diag-val accent">Invalid endpoint or broken hyperroute</span>
+              </div>
+              <div class="diag-row">
+                <span class="diag-label">RESOLUTION</span>
+                <span class="diag-val">Reroute to primary base station</span>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="hero__acts" style="display: flex; flex-wrap: wrap; gap: var(--s3); align-items: center; margin-block-start: var(--s5);">
+              <a class="btn btn--primary" href="/">Return to Home ↗</a>
+              <a class="btn" href="/#work">Explore Selected Work</a>
+              <a class="btn" href="mailto:dan.aditya.0@gmail.com?subject=Broken%20Link%20Report">Report Issue ↗</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="band accent-cyan">
+      <div class="foot page">
+        <p class="foot__name">Aditya Danapurkar</p>
+
+        <div class="foot__cols">
+          <div>
+            <p class="compartment__aside" style="margin: 0">Local time</p>
+            <p style="margin-block-start: var(--s1)"><output id="clock">--:--:--</output> IST</p>
+          </div>
+          <div>
+            <p class="compartment__aside" style="margin: 0">Contact</p>
+            <p style="margin-block-start: var(--s1)"><a class="footlink" href="mailto:dan.aditya.0@gmail.com">dan.aditya.0@gmail.com</a></p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Lightweight Page Logic (IST Clock, Path Reflection, Mobile Overlay) -->
+    <script>
+      // 1. Reflect current requested path in diagnostic trace
+      try {
+        const pathEl = document.getElementById('trace-path');
+        if (pathEl) {
+          pathEl.textContent = window.location.pathname + window.location.search || '/404';
+        }
+      } catch (e) {}
+
+      // 2. Indian Standard Time Clock (UTC+05:30)
+      function updateClock() {
+        const out = document.getElementById('clock');
+        if (!out) return;
+        const ist = new Date(Date.now() + (330 + new Date().getTimezoneOffset()) * 60000);
+        out.textContent = ist.toTimeString().slice(0, 8);
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      // 3. Mobile Navigation Menu Toggle
+      const toggle = document.getElementById('menu-toggle');
+      const overlay = document.getElementById('overlay');
+      if (toggle && overlay) {
+        toggle.addEventListener('click', () => {
+          const isOpen = overlay.getAttribute('data-open') === 'true';
+          overlay.setAttribute('data-open', isOpen ? 'false' : 'true');
+          toggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        });
+        overlay.querySelectorAll('a').forEach((link) => {
+          link.addEventListener('click', () => {
+            overlay.setAttribute('data-open', 'false');
+            toggle.setAttribute('aria-expanded', 'false');
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
